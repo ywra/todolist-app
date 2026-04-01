@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 700" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <filter id="shadow" x="-2%" y="-2%" width="104%" height="104%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="700" fill="#f8fafc" rx="8"/>
+
+  <!-- Header -->
+  <rect width="960" height="56" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="24" y="35" font-size="18" font-weight="700" fill="#1e293b">Todo App</text>
+  <text x="780" y="35" font-size="13" fill="#475569">홍길동</text>
+  <rect x="840" y="16" width="80" height="30" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="880" y="36" font-size="12" fill="#64748b" text-anchor="middle">로그아웃</text>
+
+  <!-- Back link -->
+  <text x="40" y="92" font-size="13" fill="#3b82f6" font-weight="500">← 목록으로 돌아가기</text>
+
+  <!-- Detail Card -->
+  <rect x="140" y="112" width="680" height="520" rx="12" fill="#ffffff" filter="url(#shadow)" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Status badge + action buttons -->
+  <rect x="180" y="140" width="60" height="24" rx="12" fill="#dbeafe"/>
+  <text x="210" y="157" font-size="11" font-weight="600" fill="#1d4ed8" text-anchor="middle">진행중</text>
+
+  <rect x="640" y="136" width="56" height="30" rx="6" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="668" y="155" font-size="12" fill="#475569" text-anchor="middle">수정</text>
+  <rect x="704" y="136" width="56" height="30" rx="6" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+  <text x="732" y="155" font-size="12" fill="#dc2626" text-anchor="middle">삭제</text>
+
+  <!-- Title -->
+  <text x="180" y="200" font-size="22" font-weight="700" fill="#1e293b">React 공부하기</text>
+  <line x1="180" y1="216" x2="780" y2="216" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Description -->
+  <text x="180" y="246" font-size="12" font-weight="600" fill="#94a3b8">설명</text>
+  <text x="180" y="270" font-size="14" fill="#475569">공식 문서 정독 후 개인 프로젝트에 적용하기</text>
+  <line x1="180" y1="294" x2="780" y2="294" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Dates -->
+  <text x="180" y="324" font-size="12" font-weight="600" fill="#94a3b8">시작일</text>
+  <text x="180" y="346" font-size="15" fill="#1e293b">2026-04-01</text>
+
+  <text x="460" y="324" font-size="12" font-weight="600" fill="#94a3b8">종료일</text>
+  <text x="460" y="346" font-size="15" fill="#1e293b">2026-04-05</text>
+  <line x1="180" y1="368" x2="780" y2="368" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Metadata -->
+  <text x="180" y="398" font-size="12" font-weight="600" fill="#94a3b8">생성일시</text>
+  <text x="180" y="418" font-size="13" fill="#475569">2026-04-01 09:00</text>
+
+  <text x="460" y="398" font-size="12" font-weight="600" fill="#94a3b8">최종 수정일시</text>
+  <text x="460" y="418" font-size="13" fill="#475569">2026-04-01 14:30</text>
+  <line x1="180" y1="440" x2="780" y2="440" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Complete button -->
+  <rect x="340" y="468" width="280" height="44" rx="8" fill="#22c55e"/>
+  <text x="480" y="495" font-size="15" font-weight="600" fill="#ffffff" text-anchor="middle">완료 처리</text>
+
+  <!-- Note for completed state -->
+  <text x="480" y="540" font-size="11" fill="#94a3b8" text-anchor="middle">성공 완료 상태인 경우 "완료 취소" 버튼으로 변경됨</text>
+
+  <!-- Completed state button (faded/reference) -->
+  <rect x="340" y="554" width="280" height="44" rx="8" fill="none" stroke="#f97316" stroke-width="1.5" stroke-dasharray="6 3"/>
+  <text x="480" y="581" font-size="15" font-weight="600" fill="#f97316" text-anchor="middle">완료 취소</text>
+
+  <!-- Page label -->
+  <text x="480" y="660" font-size="11" fill="#94a3b8" text-anchor="middle">TodoDetailPage — Desktop (768px+)</text>
+</svg>
