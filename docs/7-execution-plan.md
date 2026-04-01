@@ -30,14 +30,14 @@
 | 예상 소요 | 15분 |
 
 **완료 조건:**
-- [ ] `todolist` 데이터베이스가 PostgreSQL에 생성됨
-- [ ] `pgcrypto` 확장이 활성화됨
-- [ ] `users` 테이블 5개 컬럼(id, email, password, name, created_at) 생성
-- [ ] `todos` 테이블 9개 컬럼 생성
-- [ ] `users.email` UNIQUE 제약 적용
-- [ ] `todos.due_date >= start_date` CHECK 제약 적용
-- [ ] `todos.user_id` FK(ON DELETE CASCADE) 적용
-- [ ] `idx_todos_user_id` 인덱스 생성
+- [x] `todolist` 데이터베이스가 PostgreSQL에 생성됨
+- [x] `pgcrypto` 확장이 활성화됨
+- [x] `users` 테이블 5개 컬럼(id, email, password, name, created_at) 생성
+- [x] `todos` 테이블 9개 컬럼 생성
+- [x] `users.email` UNIQUE 제약 적용
+- [x] `todos.due_date >= start_date` CHECK 제약 적용
+- [x] `todos.user_id` FK(ON DELETE CASCADE) 적용
+- [x] `idx_todos_user_id` 인덱스 생성
 
 ---
 
@@ -50,9 +50,9 @@
 | 예상 소요 | 20분 |
 
 **완료 조건:**
-- [ ] `backend/.env.example`에 DB/JWT/CORS 환경 변수 정의
-- [ ] `src/config/env.ts`에서 필수 변수 누락 시 명시적 에러 throw
-- [ ] `.env` 파일이 `.gitignore`에 포함
+- [x] `backend/.env.example`에 DB/JWT/CORS 환경 변수 정의
+- [x] `src/config/env.ts`에서 필수 변수 누락 시 명시적 에러 throw
+- [x] `.env` 파일이 `.gitignore`에 포함
 
 ---
 
@@ -65,10 +65,10 @@
 | 예상 소요 | 30분 |
 
 **완료 조건:**
-- [ ] `pg.Pool` 인스턴스가 환경 변수 기반으로 생성되어 export됨
-- [ ] 연결 실패 시 `console.error`로 로깅
-- [ ] `pool.end()` graceful shutdown 처리 존재
-- [ ] `testConnection()` 함수로 DB 연결 확인 가능
+- [x] `pg.Pool` 인스턴스가 환경 변수 기반으로 생성되어 export됨
+- [x] 연결 실패 시 `console.error`로 로깅
+- [x] `pool.end()` graceful shutdown 처리 존재
+- [x] `testConnection()` 함수로 DB 연결 확인 가능
 
 ---
 
@@ -81,10 +81,10 @@
 | 예상 소요 | 40분 |
 
 **완료 조건:**
-- [ ] `createUser`가 INSERT 실행 후 생성된 사용자 반환
-- [ ] `findByEmail`이 이메일 기반 조회 (password 포함)
-- [ ] `findById`가 UUID 기반 조회 (password 제외)
-- [ ] 모든 쿼리가 Parameterized Query ($1, $2) 사용
+- [x] `createUser`가 INSERT 실행 후 생성된 사용자 반환
+- [x] `findByEmail`이 이메일 기반 조회 (password 포함)
+- [x] `findById`가 UUID 기반 조회 (password 제외)
+- [x] 모든 쿼리가 Parameterized Query ($1, $2) 사용
 
 ---
 
@@ -97,14 +97,14 @@
 | 예상 소요 | 1시간 30분 |
 
 **완료 조건:**
-- [ ] `create` - INSERT 후 생성된 할일 반환
-- [ ] `findById` - 단건 조회
-- [ ] `findByUserId` - 필터(상태), 정렬(시작일/종료일), 페이지네이션(LIMIT/OFFSET) 동적 SQL
-- [ ] `update` - 동적 SET 절 + `updated_at = CURRENT_TIMESTAMP`
-- [ ] `updateCompletionStatus` - `is_completed` + `updated_at` 갱신
-- [ ] `deleteById` - DELETE 실행
-- [ ] `countByUserId` - 전체 건수 조회
-- [ ] 모든 쿼리가 Parameterized Query 사용
+- [x] `create` - INSERT 후 생성된 할일 반환
+- [x] `findById` - 단건 조회
+- [x] `findByUserId` - 필터(상태), 정렬(시작일/종료일), 페이지네이션(LIMIT/OFFSET) 동적 SQL
+- [x] `update` - 동적 SET 절 + `updated_at = CURRENT_TIMESTAMP`
+- [x] `updateCompletionStatus` - `is_completed` + `updated_at` 갱신
+- [x] `deleteById` - DELETE 실행
+- [x] `countByUserId` - 전체 건수 조회
+- [x] 모든 쿼리가 Parameterized Query 사용
 
 ---
 
@@ -117,8 +117,8 @@
 | 예상 소요 | 15분 |
 
 **완료 조건:**
-- [ ] `updated_at` 갱신 방식 결정 (트리거 or 애플리케이션)
-- [ ] 결정된 방식이 DB-05 쿼리에 반영 확인
+- [x] `updated_at` 갱신 방식 결정 (트리거 or 애플리케이션)
+- [x] 결정된 방식이 DB-05 쿼리에 반영 확인
 
 ---
 
@@ -131,13 +131,13 @@
 | 예상 소요 | 1시간 30분 |
 
 **완료 조건:**
-- [ ] DB Pool 연결 테스트 통과
-- [ ] User Repository CRUD 테스트 통과
-- [ ] Todo Repository CRUD 테스트 통과
-- [ ] 페이지네이션 (LIMIT/OFFSET) 테스트 통과
-- [ ] CHECK 제약 (due_date >= start_date) 위반 테스트 통과
-- [ ] FK CASCADE 삭제 테스트 통과
-- [ ] 이메일 UNIQUE 위반 테스트 통과
+- [x] DB Pool 연결 테스트 통과
+- [x] User Repository CRUD 테스트 통과
+- [x] Todo Repository CRUD 테스트 통과
+- [x] 페이지네이션 (LIMIT/OFFSET) 테스트 통과
+- [x] CHECK 제약 (due_date >= start_date) 위반 테스트 통과
+- [x] FK CASCADE 삭제 테스트 통과
+- [x] 이메일 UNIQUE 위반 테스트 통과
 
 ---
 
