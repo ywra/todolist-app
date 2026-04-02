@@ -1,10 +1,22 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
+import Button from '@/components/common/Button';
+import Modal from '@/components/common/Modal';
 import TodoItem from '@/components/todo/TodoItem';
+import TodoCreateForm from '@/components/todo/TodoCreateForm';
 import { useDailyTodos } from '@/hooks/useTodos';
 import { useTranslation } from '@/hooks/useTranslation';
 import type { Todo } from '@/types/todo-types';
 import './DailyTodoPage.css';
+
+function getTodayString(): string {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
 
 function formatKoreanDate(date: Date): string {
   const year = date.getFullYear();
@@ -17,6 +29,7 @@ export default function DailyTodoPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { data, isLoading } = useDailyTodos();
+  const [createModalOpen, setCreateModalOpen] = useState(false);
 
   const todos: Todo[] = data?.data ?? [];
   const pending = todos.filter((todo) => !todo.isCompleted);
@@ -34,8 +47,11 @@ export default function DailyTodoPage() {
             <h1 className="daily-todo-page-title">{t('todo.dailyTitle')}</h1>
             <p className="daily-todo-page-date">{formatKoreanDate(new Date())}</p>
           </div>
-          <p className="daily-todo-page-description">{t('todo.dailyDescription')}</p>
+          <Button variant="primary" onClick={() => setCreateModalOpen(true)}>
+            {t('todo.newTodo')}
+          </Button>
         </div>
+        <p className="daily-todo-page-description">{t('todo.dailyDescription')}</p>
 
         {isLoading ? (
           <div className="daily-todo-page-loading" role="status">
@@ -78,6 +94,19 @@ export default function DailyTodoPage() {
           </a>
         </div>
       </div>
+
+      <Modal
+        isOpen={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
+        title={t('todo.createTitle')}
+      >
+        <TodoCreateForm
+          onSuccess={() => setCreateModalOpen(false)}
+          onCancel={() => setCreateModalOpen(false)}
+          defaultStartDate={getTodayString()}
+          defaultDueDate={getTodayString()}
+        />
+      </Modal>
     </Layout>
   );
 }

@@ -14,13 +14,15 @@ import './TodoCreateForm.css';
 interface TodoCreateFormProps {
   onSuccess: () => void;
   onCancel: () => void;
+  defaultStartDate?: string;
+  defaultDueDate?: string;
 }
 
-export default function TodoCreateForm({ onSuccess, onCancel }: TodoCreateFormProps) {
+export default function TodoCreateForm({ onSuccess, onCancel, defaultStartDate = '', defaultDueDate = '' }: TodoCreateFormProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [dueDate, setDueDate] = useState('');
+  const [startDate, setStartDate] = useState(defaultStartDate);
+  const [dueDate, setDueDate] = useState(defaultDueDate);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const { t } = useTranslation();
 
