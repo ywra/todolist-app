@@ -73,7 +73,7 @@
 }
 
 .modal-btn-cancel {
-  background-color: #ffffff;
+  background-color: var(--color-bg-card);
   color: var(--color-text-secondary);
   border-color: var(--color-border-input);
 }

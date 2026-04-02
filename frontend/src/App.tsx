@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuthStore } from '@/stores/auth-store';
+import { useThemeStore } from '@/stores/theme-store';
 import PrivateRoute from '@/components/auth/PrivateRoute';
 import PublicRoute from '@/components/auth/PublicRoute';
 import LoginPage from '@/pages/LoginPage';
@@ -10,6 +12,11 @@ import ProfilePage from '@/pages/ProfilePage';
 
 function App() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const theme = useThemeStore((s) => s.theme);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   return (
     <Routes>
