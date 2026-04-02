@@ -1,0 +1,373 @@
+.reward-page {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6);
+}
+
+/* 페이지 헤더 */
+.reward-page-header {
+  margin-bottom: var(--space-6);
+}
+
+.reward-page-title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.reward-page-description {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+/* 통계 영역 */
+.reward-stats {
+  display: flex;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.reward-stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reward-stat-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.reward-stat-value {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.reward-stat-value-highlight {
+  color: var(--color-primary);
+}
+
+/* 보드게임 말판 */
+.reward-board {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.reward-board-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-5);
+}
+
+.reward-board-tracks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* 각 구간 트랙 */
+.reward-track {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.reward-track-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.reward-track-label-start {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.reward-track-label-end {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.reward-track-label-end.achieved {
+  color: var(--color-success);
+}
+
+/* 트랙 바 */
+.reward-track-bar-wrapper {
+  position: relative;
+  height: 28px;
+  display: flex;
+  align-items: center;
+}
+
+.reward-track-bar-bg {
+  width: 100%;
+  height: 12px;
+  background-color: var(--color-border);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  position: relative;
+}
+
+/* 달성된 구간 */
+.reward-track-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width 0.6s ease-out;
+}
+
+.reward-track-bar-fill.fill-achieved {
+  background-color: var(--color-success);
+}
+
+.reward-track-bar-fill.fill-current {
+  background: linear-gradient(to right, var(--color-primary), var(--color-info));
+}
+
+.reward-track-bar-fill.fill-none {
+  width: 0;
+}
+
+/* 말(현재 위치 마커) */
+.reward-track-runner {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  line-height: 1;
+  transition: left 0.6s ease-out;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+  z-index: 1;
+}
+
+@keyframes runner-bounce {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50% { transform: translate(-50%, -50%) translateY(-3px); }
+}
+
+.reward-track-runner.running {
+  animation: runner-bounce 1s ease-in-out infinite;
+}
+
+/* 보상 카드 목록 */
+.reward-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.reward-cards-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-1);
+}
+
+/* 보상 카드 */
+.reward-card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-normal), border-color var(--transition-normal);
+}
+
+.reward-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.reward-card.card-achieved {
+  border-color: #FFD700;
+  box-shadow: 0 0 0 1px #FFD700, 0 4px 16px rgba(255, 215, 0, 0.2);
+}
+
+.reward-card-left {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
+}
+
+.reward-card-icon {
+  font-size: 28px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.reward-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.reward-card-tier {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.reward-card-milestone {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.reward-card-content-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+  word-break: break-word;
+}
+
+.reward-card-content-desc {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  word-break: break-word;
+}
+
+.reward-card-not-set {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.reward-card-achieved-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: var(--space-2);
+  padding: 2px 10px;
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.reward-card-achieved-date {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.reward-card-actions {
+  flex-shrink: 0;
+}
+
+/* 로딩 */
+.reward-page-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+/* 보상 설정 모달 폼 */
+.reward-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.reward-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.reward-form-label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.reward-form-label-required {
+  color: var(--color-danger);
+  margin-left: 2px;
+}
+
+.reward-form-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px 12px;
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  resize: vertical;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.reward-form-textarea:focus {
+  border-color: var(--color-primary);
+}
+
+.reward-form-textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.reward-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+/* 반응형 */
+@media (max-width: 767px) {
+  .reward-page {
+    padding: var(--space-5) var(--space-4);
+  }
+
+  .reward-stats {
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .reward-board-tracks {
+    gap: var(--space-6);
+  }
+
+  .reward-card {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .reward-card-actions {
+    align-self: flex-end;
+  }
+}

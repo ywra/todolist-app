@@ -1,4 +1,5 @@
 import * as todoRepository from '../repositories/todo-repository';
+import * as rewardService from './reward-service';
 import { AppError, ERROR_CODES } from '../utils/error-utils';
 import {
   Todo,
@@ -249,6 +250,8 @@ export async function updateTodo(
 export async function completeTodo(userId: string, todoId: string): Promise<TodoResponse> {
   await findAndVerifyOwnership(todoId, userId);
   const updated = await todoRepository.updateCompletionStatus(todoId, true);
+  // 완료 처리 후 보상 달성 여부 비동기 체크 (실패해도 응답에 영향 없음)
+  rewardService.checkAndAwardRewards(userId).catch(() => {});
   return toTodoResponse(updated);
 }
 

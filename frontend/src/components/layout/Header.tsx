@@ -44,6 +44,12 @@ export default function Header() {
               >
                 {t('todo.dailyTitle')}
               </Link>
+              <Link
+                to="/rewards"
+                className={`header-nav-link ${location.pathname === '/rewards' ? 'header-nav-link-active' : ''}`}
+              >
+                {t('reward.title')}
+              </Link>
             </nav>
           ) : null}
         </div>

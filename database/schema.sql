@@ -36,6 +36,24 @@ CREATE TABLE todos (
 );
 
 -- ============================================
--- 3. 인덱스
+-- 3. rewards 테이블
+-- ============================================
+CREATE TABLE rewards (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    milestone INT NOT NULL,              -- 10, 30, 100
+    tier VARCHAR(20) NOT NULL,           -- 'small', 'medium', 'large'
+    title VARCHAR(200) NOT NULL,         -- 보상 제목 (사용자 작성)
+    description VARCHAR(2000),           -- 보상 상세 (사용자 작성)
+    is_achieved BOOLEAN NOT NULL DEFAULT FALSE, -- 달성 여부
+    achieved_at TIMESTAMP,               -- 달성 일시
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, milestone)           -- 사용자당 마일스톤별 1개
+);
+
+-- ============================================
+-- 4. 인덱스
 -- ============================================
 CREATE INDEX idx_todos_user_id ON todos(user_id);
+CREATE INDEX idx_rewards_user_id ON rewards(user_id);
