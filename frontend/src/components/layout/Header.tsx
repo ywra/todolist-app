@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/auth-store';
 import { useThemeStore } from '@/stores/theme-store';
 import { useLocaleStore } from '@/stores/locale-store';
@@ -18,6 +18,7 @@ export default function Header() {
   const user = useAuthStore((s) => s.user);
   const { logout } = useLogout();
   const navigate = useNavigate();
+  const location = useLocation();
   const theme = useThemeStore((s) => s.theme);
   const toggleTheme = useThemeStore((s) => s.toggleTheme);
   const locale = useLocaleStore((s) => s.locale);
@@ -31,9 +32,21 @@ export default function Header() {
   return (
     <header className="header">
       <div className="header-inner">
-        <button className="header-logo" onClick={handleLogoClick}>
-          {t('header.appName')}
-        </button>
+        <div className="header-left">
+          <button className="header-logo" onClick={handleLogoClick}>
+            {t('header.appName')}
+          </button>
+          {isAuthenticated ? (
+            <nav className="header-nav">
+              <Link
+                to="/daily"
+                className={`header-nav-link ${location.pathname === '/daily' ? 'header-nav-link-active' : ''}`}
+              >
+                {t('todo.dailyTitle')}
+              </Link>
+            </nav>
+          ) : null}
+        </div>
         <div className="header-auth">
           <div className="header-locale-group">
             {(Object.keys(LOCALE_LABELS) as Locale[]).map((loc) => (

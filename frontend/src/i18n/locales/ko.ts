@@ -52,6 +52,9 @@ export const ko = {
     notFound: '할일을 찾을 수 없습니다.',
     createdAt: '생성일시',
     updatedAt: '최종 수정일시',
+    dailyTitle: '오늘의 할일',
+    dailyEmpty: '오늘 해야 할 할일이 없습니다.',
+    dailyDescription: '오늘 진행해야 할 할일 목록입니다.',
   },
   filter: {
     label: '필터',

@@ -54,6 +54,9 @@ export const en: Translations = {
     notFound: 'Todo not found.',
     createdAt: 'Created At',
     updatedAt: 'Updated At',
+    dailyTitle: "Today's Tasks",
+    dailyEmpty: 'No tasks for today.',
+    dailyDescription: 'Tasks that are scheduled for today.',
   },
   filter: {
     label: 'Filter',

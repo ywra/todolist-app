@@ -231,6 +231,21 @@ export async function updateCompletionStatus(
   return mapRowToTodo(row);
 }
 
+export async function findDailyByUserId(userId: string): Promise<Todo[]> {
+  const sql = `
+    SELECT *
+    FROM todos
+    WHERE user_id = $1
+      AND start_date <= CURRENT_DATE
+      AND due_date >= CURRENT_DATE
+    ORDER BY due_date ASC
+  `;
+
+  const result: QueryResult<TodoRow> = await pool.query(sql, [userId]);
+
+  return result.rows.map(mapRowToTodo);
+}
+
 export async function deleteById(id: string): Promise<boolean> {
   const sql = `
     DELETE FROM todos

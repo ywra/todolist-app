@@ -9,6 +9,7 @@ import RegisterPage from '@/pages/RegisterPage';
 import TodoListPage from '@/pages/TodoListPage';
 import TodoDetailPage from '@/pages/TodoDetailPage';
 import ProfilePage from '@/pages/ProfilePage';
+import DailyTodoPage from '@/pages/DailyTodoPage';
 
 function App() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -30,6 +31,7 @@ function App() {
       <Route element={<PrivateRoute />}>
         <Route path="/todos" element={<TodoListPage />} />
         <Route path="/todos/:id" element={<TodoDetailPage />} />
+        <Route path="/daily" element={<DailyTodoPage />} />
         <Route path="/profile" element={<ProfilePage />} />
       </Route>
 

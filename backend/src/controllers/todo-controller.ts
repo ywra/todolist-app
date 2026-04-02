@@ -76,6 +76,15 @@ export async function incompleteTodo(
   }
 }
 
+export async function getDailyTodos(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const todos = await todoService.getDailyTodos((req as any).user.userId);
+    res.status(200).json({ success: true, data: todos });
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function deleteTodo(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     await todoService.deleteTodo((req as any).user.userId, req.params['id'] as string);

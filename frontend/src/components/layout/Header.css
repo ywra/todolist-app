@@ -23,6 +23,43 @@
   }
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.header-nav-link {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.header-nav-link:hover {
+  color: var(--color-primary);
+}
+
+.header-nav-link-active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+@media (max-width: 767px) {
+  .header-nav {
+    display: none;
+  }
+}
+
 .header-logo {
   font-size: var(--text-lg);
   font-weight: 700;

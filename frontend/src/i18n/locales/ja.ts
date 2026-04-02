@@ -54,6 +54,9 @@ export const ja: Translations = {
     notFound: 'Todoが見つかりません。',
     createdAt: '作成日時',
     updatedAt: '最終更新日時',
+    dailyTitle: '今日のTodo',
+    dailyEmpty: '今日やるべきTodoはありません。',
+    dailyDescription: '今日進行すべきTodoリストです。',
   },
   filter: {
     label: 'フィルター',

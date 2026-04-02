@@ -258,6 +258,11 @@ export async function incompleteTodo(userId: string, todoId: string): Promise<To
   return toTodoResponse(updated);
 }
 
+export async function getDailyTodos(userId: string): Promise<TodoResponse[]> {
+  const todos = await todoRepository.findDailyByUserId(userId);
+  return todos.map(toTodoResponse);
+}
+
 export async function deleteTodo(userId: string, todoId: string): Promise<void> {
   await findAndVerifyOwnership(todoId, userId);
   await todoRepository.deleteById(todoId);

@@ -1,0 +1,99 @@
+.daily-todo-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.daily-todo-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.daily-todo-page-title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.daily-todo-page-date {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-1);
+}
+
+.daily-todo-page-description {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.daily-todo-page-loading {
+  padding: var(--space-10) 0;
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--text-base);
+}
+
+.daily-todo-page-empty {
+  padding: var(--space-10) 0;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--text-base);
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.daily-todo-page-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.daily-todo-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.daily-todo-section-title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.daily-todo-section-completed .daily-todo-section-list {
+  opacity: 0.7;
+}
+
+.daily-todo-section-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.daily-todo-page-footer {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.daily-todo-all-link {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.daily-todo-all-link:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+  .daily-todo-page-title {
+    font-size: var(--text-xl);
+  }
+}
