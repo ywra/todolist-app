@@ -74,17 +74,20 @@ describe('useAuthStore', () => {
     });
   });
 
-  describe('메모리 전용 저장소', () => {
-    it('localStorage를 사용하지 않는다', () => {
+  describe('localStorage 영속화', () => {
+    it('setAuth 시 localStorage에 저장한다', () => {
       useAuthStore.getState().setAuth('jwt-token-123', mockUser);
-      expect(localStorage.getItem('token')).toBeNull();
-      expect(localStorage.getItem('user')).toBeNull();
+      const stored = localStorage.getItem('todolist-auth');
+      expect(stored).not.toBeNull();
+      const parsed = JSON.parse(stored!);
+      expect(parsed.token).toBe('jwt-token-123');
+      expect(parsed.user.email).toBe('test@example.com');
     });
 
-    it('sessionStorage를 사용하지 않는다', () => {
+    it('clearAuth 시 localStorage에서 제거한다', () => {
       useAuthStore.getState().setAuth('jwt-token-123', mockUser);
-      expect(sessionStorage.getItem('token')).toBeNull();
-      expect(sessionStorage.getItem('user')).toBeNull();
+      useAuthStore.getState().clearAuth();
+      expect(localStorage.getItem('todolist-auth')).toBeNull();
     });
   });
 });
