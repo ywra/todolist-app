@@ -3,7 +3,7 @@
   "info": {
     "title": "Todolist App API",
     "description": "개인 인증 기반 할일 관리 웹 애플리케이션의 RESTful API 명세입니다.\n\n## 인증\n모든 할일 관련 API는 JWT Bearer 토큰 인증이 필요합니다. 로그인 후 발급된 Access Token을 `Authorization: Bearer <token>` 형식으로 헤더에 포함하여 요청하십시오.\n\n## 토큰 만료\nAccess Token의 유효기간은 **1시간**입니다. 만료된 토큰으로 요청 시 `401 Unauthorized`가 반환됩니다.\n\n## 응답 형식\n모든 응답은 JSON 형식으로 반환됩니다.\n\n- **성공 응답:** `{ \"success\": true, \"data\": { ... } }`\n- **목록 응답:** `{ \"success\": true, \"data\": [...], \"pagination\": { ... } }`\n- **에러 응답:** `{ \"success\": false, \"error\": { \"code\": \"...\", \"message\": \"...\" } }`\n\n## 할일 상태 산출 규칙\n할일 상태는 DB에 저장되지 않으며, `start_date`, `due_date`, `is_completed`, 현재 날짜로부터 동적으로 산출됩니다.\n\n| 상태 | 산출 조건 |\n|------|-----------|\n| `pending` (시작전) | `is_completed = false` AND 오늘 < `start_date` |\n| `in_progress` (진행중) | `is_completed = false` AND `start_date` <= 오늘 <= `due_date` |\n| `overdue` (완료 실패) | `is_completed = false` AND 오늘 > `due_date` |\n| `completed` (성공 완료) | `is_completed = true` |",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "contact": {
       "name": "Todolist App"
     }
@@ -850,6 +850,75 @@
                       "properties": {
                         "data": {
                           "$ref": "#/components/schemas/DailyTodo"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/daily-todos/calendar": {
+      "get": {
+        "tags": ["DailyTodos"],
+        "summary": "오늘의 할일 달력 데이터 조회",
+        "description": "특정 연도와 월의 오늘의 할일 목록을 달력 데이터로 조회합니다.",
+        "operationId": "getCalendarData",
+        "security": [
+          { "BearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "조회 연도 (예: 2026)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 2026
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "조회 월 (1-12)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12,
+              "example": 4
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "달력 데이터 조회 성공.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/SuccessResponse" },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/DailyTodo"
+                          }
                         }
                       }
                     }

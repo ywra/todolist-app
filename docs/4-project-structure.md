@@ -6,6 +6,7 @@
 |------|--------|-----------|--------|
 | v1.0.0 | 2026-04-01 | 최초 작성 | - |
 | v1.1.0 | 2026-04-02 | 오늘의 할일 및 보상 시스템 엔드포인트, 디렉토리 구조, 프로필 관련 API 추가 | - |
+| v1.2.0 | 2026-04-02 | 달력 조회 엔드포인트, DailyCalendar 컴포넌트 추가 | - |
 
 ---
 
@@ -196,6 +197,7 @@ RESTful 규칙을 따르며, 리소스는 복수형 명사를 사용한다.
 | PATCH | `/api/todos/:id/incomplete` | 할일 완료 취소 | UC-10 |
 | GET | `/api/daily-todos` | 오늘의 할일 목록 조회 | - |
 | POST | `/api/daily-todos` | 오늘의 할일 등록 | - |
+| GET | `/api/daily-todos/calendar` | 오늘의 할일 달력 데이터 조회 | - |
 | PATCH | `/api/daily-todos/:id/complete` | 오늘의 할일 완료 | - |
 | PATCH | `/api/daily-todos/:id/incomplete` | 오늘의 할일 미완료 | - |
 | DELETE | `/api/daily-todos/:id` | 오늘의 할일 삭제 | - |
@@ -349,7 +351,8 @@ frontend/
 │   │   ├── common/             # 공통 (Button, Input, Modal 등)
 │   │   ├── auth/               # 인증 관련
 │   │   ├── todo/               # 할일 관련
-│   │   │   └── DailyTodoItem.tsx
+│   │   │   ├── DailyTodoItem.tsx
+│   │   │   └── DailyCalendar.tsx
 │   │   └── layout/             # 레이아웃 (Header, Footer 등)
 │   ├── hooks/                  # 커스텀 훅
 │   │   ├── useAuth.ts          # 인증 TanStack Query 훅
