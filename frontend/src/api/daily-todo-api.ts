@@ -27,3 +27,13 @@ export const incompleteDailyTodo = async (id: string): Promise<ApiResponse<Daily
 export const deleteDailyTodo = async (id: string): Promise<void> => {
   await apiClient.delete(`/daily-todos/${id}`);
 };
+
+export const getCalendarData = async (
+  year: number,
+  month: number,
+): Promise<ApiResponse<DailyTodo[]>> => {
+  const res = await apiClient.get<ApiResponse<DailyTodo[]>>(
+    `/daily-todos/calendar?year=${year}&month=${month}`,
+  );
+  return res.data;
+};

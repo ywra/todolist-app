@@ -92,6 +92,20 @@
   text-decoration: underline;
 }
 
+.daily-todo-selected-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.daily-todo-selected-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--color-primary);
+}
+
 @media (max-width: 767px) {
   .daily-todo-page-title {
     font-size: var(--text-xl);

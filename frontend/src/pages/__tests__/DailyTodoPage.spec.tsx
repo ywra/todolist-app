@@ -22,6 +22,7 @@ vi.mock('@/hooks/useDailyTodos', () => ({
   useCompleteDailyTodo: () => ({ mutate: vi.fn(), isPending: false }),
   useIncompleteDailyTodo: () => ({ mutate: vi.fn(), isPending: false }),
   useDeleteDailyTodo: () => ({ mutate: vi.fn(), isPending: false }),
+  useDailyCalendar: () => ({ data: { data: [], success: true } }),
 }));
 
 function renderPage() {
@@ -49,10 +50,10 @@ describe('DailyTodoPage', () => {
     expect(screen.getByText('로딩 중...')).toBeInTheDocument();
   });
 
-  it('빈 목록 시 "오늘 해야 할 할일이 없습니다." 안내가 표시된다', () => {
+  it('빈 목록 시 달력이 표시된다', () => {
     mockUseDailyTodos.mockReturnValue({ data: { data: [], success: true }, isLoading: false });
     renderPage();
-    expect(screen.getByText('오늘 해야 할 할일이 없습니다.')).toBeInTheDocument();
+    expect(screen.getByTestId('daily-calendar')).toBeInTheDocument();
   });
 
   it('"내 할일 목록 →" 링크가 /todos로 이동한다', () => {

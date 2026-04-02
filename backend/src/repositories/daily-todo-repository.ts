@@ -107,3 +107,19 @@ export async function getCompletedCount(userId: string): Promise<number> {
   const result: QueryResult<{ total: string }> = await pool.query(sql, [userId]);
   return parseInt(result.rows[0]?.total ?? '0', 10);
 }
+
+export async function findByUserIdInRange(
+  userId: string,
+  startDate: string,
+  endDate: string,
+): Promise<DailyTodo[]> {
+  const sql = `
+    SELECT * FROM daily_todos
+    WHERE user_id = $1
+      AND start_date <= $2::date
+      AND due_date >= $3::date
+    ORDER BY due_date ASC
+  `;
+  const result: QueryResult<DailyTodoRow> = await pool.query(sql, [userId, endDate, startDate]);
+  return result.rows.map(mapRowToDailyTodo);
+}

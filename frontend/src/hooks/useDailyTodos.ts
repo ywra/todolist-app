@@ -5,6 +5,7 @@ import {
   completeDailyTodo,
   incompleteDailyTodo,
   deleteDailyTodo,
+  getCalendarData,
 } from '@/api/daily-todo-api';
 import type { CreateDailyTodoRequest } from '@/types/daily-todo-types';
 
@@ -59,5 +60,12 @@ export function useDeleteDailyTodo() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['daily-todos'] });
     },
+  });
+}
+
+export function useDailyCalendar(year: number, month: number) {
+  return useQuery({
+    queryKey: ['daily-todos', 'calendar', year, month],
+    queryFn: () => getCalendarData(year, month),
   });
 }

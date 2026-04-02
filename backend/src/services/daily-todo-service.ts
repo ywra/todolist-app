@@ -123,3 +123,14 @@ export async function deleteDailyTodo(userId: string, todoId: string): Promise<v
   await findAndVerifyOwnership(todoId, userId);
   await dailyTodoRepository.deleteById(todoId);
 }
+
+export async function getCalendarData(
+  userId: string,
+  year: number,
+  month: number,
+): Promise<DailyTodo[]> {
+  const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
+  const lastDay = new Date(year, month, 0).getDate();
+  const endDate = `${year}-${String(month).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
+  return dailyTodoRepository.findByUserIdInRange(userId, startDate, endDate);
+}

@@ -1,0 +1,147 @@
+.daily-calendar {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+/* 헤더 */
+.daily-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.daily-calendar-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.daily-calendar-nav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  line-height: 1;
+}
+
+.daily-calendar-nav-btn:hover {
+  background-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+/* 7열 그리드 */
+.daily-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+/* 요일 헤더 셀 */
+.daily-calendar-weekday {
+  text-align: center;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  padding: var(--space-1) 0;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 날짜 셀 */
+.daily-calendar-cell {
+  position: relative;
+  min-height: 40px;
+  min-width: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  padding: 2px;
+}
+
+.daily-calendar-cell:hover {
+  background-color: var(--color-border);
+}
+
+.daily-calendar-cell--empty {
+  cursor: default;
+}
+
+.daily-calendar-cell--empty:hover {
+  background-color: transparent;
+}
+
+.daily-calendar-cell--today {
+  border-color: var(--color-primary);
+}
+
+.daily-calendar-cell--selected {
+  background-color: var(--color-primary-light);
+}
+
+.daily-calendar-cell--selected:hover {
+  background-color: var(--color-primary-light);
+}
+
+.daily-calendar-day-number {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.daily-calendar-cell--today .daily-calendar-day-number {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* 완료 상태 마커 */
+.daily-calendar-marker {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+}
+
+.daily-calendar-marker--complete {
+  background-color: var(--color-success);
+}
+
+.daily-calendar-marker--incomplete {
+  background-color: var(--color-danger);
+}
+
+/* 반응형: 모바일에서 셀 축소하되 7열 유지 */
+@media (max-width: 480px) {
+  .daily-calendar {
+    padding: var(--space-3);
+  }
+
+  .daily-calendar-cell {
+    min-height: 32px;
+    min-width: 0;
+  }
+
+  .daily-calendar-day-number {
+    font-size: var(--text-xs);
+  }
+
+  .daily-calendar-marker {
+    width: 6px;
+    height: 6px;
+  }
+}

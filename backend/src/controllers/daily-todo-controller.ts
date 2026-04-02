@@ -77,3 +77,32 @@ export async function deleteDailyTodo(
     next(err);
   }
 }
+
+export async function getCalendarData(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> {
+  try {
+    const year = Number(req.query['year']);
+    const month = Number(req.query['month']);
+
+    if (!Number.isInteger(year) || year < 2000 || year > 2100) {
+      res.status(400).json({ success: false, error: 'year는 2000~2100 사이의 정수여야 합니다.' });
+      return;
+    }
+    if (!Number.isInteger(month) || month < 1 || month > 12) {
+      res.status(400).json({ success: false, error: 'month는 1~12 사이의 정수여야 합니다.' });
+      return;
+    }
+
+    const dailyTodos = await dailyTodoService.getCalendarData(
+      (req as any).user.userId,
+      year,
+      month,
+    );
+    res.status(200).json({ success: true, data: dailyTodos });
+  } catch (err) {
+    next(err);
+  }
+}

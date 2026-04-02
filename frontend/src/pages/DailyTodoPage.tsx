@@ -5,6 +5,7 @@ import Input from '@/components/common/Input';
 import TextArea from '@/components/common/TextArea';
 import Modal from '@/components/common/Modal';
 import DailyTodoItem from '@/components/todo/DailyTodoItem';
+import DailyCalendar from '@/components/todo/DailyCalendar';
 import { useDailyTodos, useCreateDailyTodo } from '@/hooks/useDailyTodos';
 import { useTranslation } from '@/hooks/useTranslation';
 import {
@@ -28,6 +29,11 @@ function formatKoreanDate(date: Date): string {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}년 ${month}월 ${day}일`;
+}
+
+function formatSelectedDateLabel(dateStr: string): string {
+  const [year, month, day] = dateStr.split('-');
+  return `${Number(month)}월 ${Number(day)}일 할일`;
 }
 
 interface DailyTodoCreateFormProps {
@@ -142,10 +148,20 @@ export default function DailyTodoPage() {
   const { t } = useTranslation();
   const { data, isLoading } = useDailyTodos();
   const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string>(getTodayString());
+  const [selectedDateTodos, setSelectedDateTodos] = useState<DailyTodo[]>([]);
 
   const todos: DailyTodo[] = data?.data ?? [];
   const pending = todos.filter((todo) => !todo.isCompleted);
   const completed = todos.filter((todo) => todo.isCompleted);
+
+  const handleDateSelect = (date: string, dateTodos: DailyTodo[]) => {
+    setSelectedDate(date);
+    setSelectedDateTodos(dateTodos);
+  };
+
+  const selectedPending = selectedDateTodos.filter((t) => !t.isCompleted);
+  const selectedCompleted = selectedDateTodos.filter((t) => t.isCompleted);
 
   return (
     <Layout>
@@ -161,15 +177,50 @@ export default function DailyTodoPage() {
         </div>
         <p className="daily-todo-page-description">{t('todo.dailyDescription')}</p>
 
+        <DailyCalendar onDateSelect={handleDateSelect} />
+
+        <div className="daily-todo-selected-section">
+          <h2 className="daily-todo-selected-title">
+            {formatSelectedDateLabel(selectedDate)}
+          </h2>
+
+          {selectedDateTodos.length === 0 ? (
+            <div className="daily-todo-page-empty">
+              <p>{t('calendar.noTodos')}</p>
+            </div>
+          ) : (
+            <div className="daily-todo-page-list">
+              {selectedPending.length > 0 ? (
+                <section className="daily-todo-section">
+                  <div className="daily-todo-section-list">
+                    {selectedPending.map((todo) => (
+                      <DailyTodoItem key={todo.id} todo={todo} />
+                    ))}
+                  </div>
+                </section>
+              ) : null}
+
+              {selectedCompleted.length > 0 ? (
+                <section className="daily-todo-section daily-todo-section-completed">
+                  <h3 className="daily-todo-section-title">
+                    {t('status.completed')} ({selectedCompleted.length})
+                  </h3>
+                  <div className="daily-todo-section-list">
+                    {selectedCompleted.map((todo) => (
+                      <DailyTodoItem key={todo.id} todo={todo} />
+                    ))}
+                  </div>
+                </section>
+              ) : null}
+            </div>
+          )}
+        </div>
+
         {isLoading ? (
           <div className="daily-todo-page-loading" role="status">
             {t('common.loading')}
           </div>
-        ) : todos.length === 0 ? (
-          <div className="daily-todo-page-empty">
-            <p>{t('todo.dailyEmpty')}</p>
-          </div>
-        ) : (
+        ) : todos.length === 0 ? null : (
           <div className="daily-todo-page-list">
             {pending.length > 0 ? (
               <section className="daily-todo-section">
