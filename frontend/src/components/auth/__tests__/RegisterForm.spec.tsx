@@ -27,9 +27,9 @@ describe('RegisterForm', () => {
     renderRegisterForm();
     fireEvent.click(screen.getByRole('button', { name: '가입하기' }));
     await waitFor(() => {
-      expect(screen.getByText('이름을 입력해주세요.')).toBeInTheDocument();
-      expect(screen.getByText('이메일을 입력해주세요.')).toBeInTheDocument();
-      expect(screen.getByText('비밀번호를 입력해주세요.')).toBeInTheDocument();
+      expect(screen.getByText('이름을 입력해 주세요.')).toBeInTheDocument();
+      expect(screen.getByText('이메일을 입력해 주세요.')).toBeInTheDocument();
+      expect(screen.getByText('비밀번호를 입력해 주세요.')).toBeInTheDocument();
     });
   });
 

@@ -1,3 +1,4 @@
+import { useTranslation } from '@/hooks/useTranslation';
 import './Pagination.css';
 
 interface PaginationProps {
@@ -15,13 +16,18 @@ export default function Pagination({
   pageSize,
   onPageChange,
 }: PaginationProps) {
+  const { t } = useTranslation();
+
   if (totalPages <= 1) return null;
 
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
     <div className="pagination">
-      <span className="pagination-info">전체 {totalCount}건 {pageSize}건/페이지</span>
+      <span className="pagination-info">
+        {t('pagination.total', { count: totalCount })}{' '}
+        {t('pagination.perPage', { size: pageSize })}
+      </span>
       <div className="pagination-buttons">
         <button
           className="pagination-btn"

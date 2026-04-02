@@ -6,11 +6,13 @@ import Button from '@/components/common/Button';
 import { useProfile, useUpdateProfile, useChangePassword } from '@/hooks/useAuth';
 import { useAuthStore } from '@/stores/auth-store';
 import { validateName, validatePassword } from '@/utils/validation-utils';
+import { useTranslation } from '@/hooks/useTranslation';
 import './ProfilePage.css';
 
 export default function ProfilePage() {
   const user = useAuthStore((s) => s.user);
   useProfile();
+  const { t } = useTranslation();
 
   // 프로필 수정 상태
   const [name, setName] = useState(user?.name ?? '');
@@ -36,18 +38,19 @@ export default function ProfilePage() {
     setProfileSuccess(null);
     setProfileError(null);
 
-    const error = validateName(name);
-    setNameError(error);
-    if (error) return;
+    const errorKey = validateName(name);
+    const errorMsg = errorKey ? t(errorKey) : null;
+    setNameError(errorMsg);
+    if (errorMsg) return;
 
     updateProfileMutation.mutate(
       { name },
       {
         onSuccess: () => {
-          setProfileSuccess('프로필이 성공적으로 저장되었습니다.');
+          setProfileSuccess(t('profile.profileUpdated'));
         },
         onError: () => {
-          setProfileError('프로필 저장에 실패했습니다. 다시 시도해주세요.');
+          setProfileError(t('profile.profileUpdated'));
         },
       },
     );
@@ -61,21 +64,22 @@ export default function ProfilePage() {
     let hasError = false;
 
     if (!currentPassword) {
-      setCurrentPasswordError('현재 비밀번호를 입력해주세요.');
+      setCurrentPasswordError(t('validation.passwordRequired'));
       hasError = true;
     } else {
       setCurrentPasswordError(null);
     }
 
-    const newPwError = validatePassword(newPassword);
-    setNewPasswordError(newPwError);
-    if (newPwError) hasError = true;
+    const newPwKey = validatePassword(newPassword);
+    const newPwMsg = newPwKey ? t(newPwKey) : null;
+    setNewPasswordError(newPwMsg);
+    if (newPwMsg) hasError = true;
 
     if (!confirmPassword) {
-      setConfirmPasswordError('새 비밀번호 확인을 입력해주세요.');
+      setConfirmPasswordError(t('validation.passwordRequired'));
       hasError = true;
     } else if (newPassword !== confirmPassword) {
-      setConfirmPasswordError('새 비밀번호가 일치하지 않습니다.');
+      setConfirmPasswordError(t('profile.passwordMismatch'));
       hasError = true;
     } else {
       setConfirmPasswordError(null);
@@ -87,13 +91,13 @@ export default function ProfilePage() {
       { currentPassword, newPassword },
       {
         onSuccess: () => {
-          setPasswordSuccess('비밀번호가 성공적으로 변경되었습니다.');
+          setPasswordSuccess(t('profile.passwordChanged'));
           setCurrentPassword('');
           setNewPassword('');
           setConfirmPassword('');
         },
         onError: () => {
-          setPasswordError('비밀번호 변경에 실패했습니다. 현재 비밀번호를 확인해주세요.');
+          setPasswordError(t('profile.passwordMismatch'));
         },
       },
     );
@@ -105,29 +109,29 @@ export default function ProfilePage() {
         <div className="profile-card">
           <div className="profile-card-header">
             <Link to="/todos" className="profile-back-link">
-              ← 목록으로 돌아가기
+              ← {t('common.back')}
             </Link>
-            <h1 className="profile-card-title">내 정보 수정</h1>
+            <h1 className="profile-card-title">{t('profile.title')}</h1>
           </div>
 
           {/* 프로필 수정 섹션 */}
           <section className="profile-section">
-            <h2 className="profile-section-title">프로필 수정</h2>
+            <h2 className="profile-section-title">{t('profile.editProfile')}</h2>
             <form className="profile-form" onSubmit={handleProfileSubmit} noValidate>
               <Input
-                label="이메일"
+                label={t('auth.email')}
                 type="email"
                 value={user?.email ?? ''}
                 disabled
               />
               <Input
-                label="이름"
+                label={t('auth.name')}
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 error={nameError ?? undefined}
                 required
-                placeholder="이름을 입력해주세요"
+                placeholder={t('auth.namePlaceholder')}
               />
               {profileSuccess ? (
                 <p className="profile-alert profile-alert-success" role="status">
@@ -145,7 +149,7 @@ export default function ProfilePage() {
                   variant="primary"
                   loading={updateProfileMutation.isPending}
                 >
-                  저장
+                  {t('common.save')}
                 </Button>
               </div>
             </form>
@@ -153,34 +157,34 @@ export default function ProfilePage() {
 
           {/* 비밀번호 변경 섹션 */}
           <section className="profile-section">
-            <h2 className="profile-section-title">비밀번호 변경</h2>
+            <h2 className="profile-section-title">{t('profile.changePassword')}</h2>
             <form className="profile-form" onSubmit={handlePasswordSubmit} noValidate>
               <Input
-                label="현재 비밀번호"
+                label={t('profile.currentPassword')}
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 error={currentPasswordError ?? undefined}
                 required
-                placeholder="현재 비밀번호를 입력해주세요"
+                placeholder={t('profile.currentPassword')}
               />
               <Input
-                label="새 비밀번호"
+                label={t('profile.newPassword')}
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 error={newPasswordError ?? undefined}
                 required
-                placeholder="새 비밀번호를 입력해주세요"
+                placeholder={t('profile.newPassword')}
               />
               <Input
-                label="새 비밀번호 확인"
+                label={t('profile.confirmPassword')}
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 error={confirmPasswordError ?? undefined}
                 required
-                placeholder="새 비밀번호를 다시 입력해주세요"
+                placeholder={t('profile.confirmPassword')}
               />
               {passwordSuccess ? (
                 <p className="profile-alert profile-alert-success" role="status">
@@ -198,7 +202,7 @@ export default function ProfilePage() {
                   variant="primary"
                   loading={changePasswordMutation.isPending}
                 >
-                  비밀번호 변경
+                  {t('profile.changePassword')}
                 </Button>
               </div>
             </form>

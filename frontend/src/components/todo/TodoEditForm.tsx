@@ -8,6 +8,7 @@ import {
   validateDateRange,
 } from '@/utils/validation-utils';
 import { useUpdateTodo } from '@/hooks/useTodos';
+import { useTranslation } from '@/hooks/useTranslation';
 import type { Todo } from '@/types/todo-types';
 import './TodoEditForm.css';
 
@@ -23,20 +24,21 @@ export default function TodoEditForm({ todo, onSuccess, onCancel }: TodoEditForm
   const [startDate, setStartDate] = useState(todo.startDate);
   const [dueDate, setDueDate] = useState(todo.dueDate);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const { t } = useTranslation();
 
   const updateTodo = useUpdateTodo();
 
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    const titleError = validateTodoTitle(title);
-    if (titleError) newErrors['title'] = titleError;
+    const titleKey = validateTodoTitle(title);
+    if (titleKey) newErrors['title'] = t(titleKey);
 
-    const descError = validateTodoDescription(description);
-    if (descError) newErrors['description'] = descError;
+    const descKey = validateTodoDescription(description);
+    if (descKey) newErrors['description'] = t(descKey);
 
-    const dateError = validateDateRange(startDate, dueDate);
-    if (dateError) newErrors['date'] = dateError;
+    const dateKey = validateDateRange(startDate, dueDate);
+    if (dateKey) newErrors['date'] = t(dateKey);
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -67,28 +69,28 @@ export default function TodoEditForm({ todo, onSuccess, onCancel }: TodoEditForm
   return (
     <form className="todo-edit-form" onSubmit={handleSubmit} noValidate>
       <Input
-        label="제목"
+        label={t('todo.title')}
         required
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         error={errors['title']}
-        placeholder="할일 제목을 입력하세요"
+        placeholder={t('todo.titlePlaceholder')}
         name="title"
       />
 
       <TextArea
-        label="설명 (선택)"
+        label={t('todo.description')}
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         error={errors['description']}
-        placeholder="상세 설명을 입력하세요"
+        placeholder={t('todo.descriptionPlaceholder')}
         maxLength={2000}
         name="description"
       />
 
       <div className="todo-edit-form-dates">
         <Input
-          label="시작일"
+          label={t('todo.startDate')}
           type="date"
           required
           value={startDate}
@@ -96,7 +98,7 @@ export default function TodoEditForm({ todo, onSuccess, onCancel }: TodoEditForm
           name="startDate"
         />
         <Input
-          label="종료일"
+          label={t('todo.dueDate')}
           type="date"
           required
           value={dueDate}
@@ -111,10 +113,10 @@ export default function TodoEditForm({ todo, onSuccess, onCancel }: TodoEditForm
 
       <div className="todo-edit-form-actions">
         <Button variant="secondary" type="button" onClick={onCancel}>
-          취소
+          {t('common.cancel')}
         </Button>
         <Button variant="primary" type="submit" loading={updateTodo.isPending}>
-          저장하기
+          {t('common.save')}
         </Button>
       </div>
     </form>

@@ -45,7 +45,7 @@ describe('TodoDetailPage', () => {
       isError: false,
     });
     renderPage();
-    expect(screen.getByText('불러오는 중...')).toBeInTheDocument();
+    expect(screen.getByText('로딩 중...')).toBeInTheDocument();
   });
 
   it('뒤로가기 링크가 렌더링된다', () => {

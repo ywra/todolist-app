@@ -95,3 +95,45 @@
   background-color: var(--color-bg);
   border-color: var(--color-primary);
 }
+
+.header-locale-group {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.header-locale-btn {
+  height: 36px;
+  padding: 0 10px;
+  font-family: var(--font-family);
+  font-size: var(--text-xs, 12px);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background: none;
+  border: none;
+  border-right: 1px solid var(--color-border-input);
+  cursor: pointer;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  line-height: 1;
+}
+
+.header-locale-btn:last-child {
+  border-right: none;
+}
+
+.header-locale-btn:hover {
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+}
+
+.header-locale-btn-active {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.header-locale-btn-active:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+}

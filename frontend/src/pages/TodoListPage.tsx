@@ -7,6 +7,7 @@ import TodoFilter from '@/components/todo/TodoFilter';
 import TodoList from '@/components/todo/TodoList';
 import TodoCreateForm from '@/components/todo/TodoCreateForm';
 import { useTodos } from '@/hooks/useTodos';
+import { useTranslation } from '@/hooks/useTranslation';
 import './TodoListPage.css';
 
 const PAGE_SIZE = 20;
@@ -17,6 +18,7 @@ export default function TodoListPage() {
   const [sortBy, setSortBy] = useState('startDate');
   const [sortOrder, setSortOrder] = useState('asc');
   const [page, setPage] = useState(1);
+  const { t } = useTranslation();
 
   const params = {
     status: status || undefined,
@@ -48,9 +50,9 @@ export default function TodoListPage() {
     <Layout>
       <div className="todo-list-page">
         <div className="todo-list-page-header">
-          <h1 className="todo-list-page-title">내 할일 목록</h1>
+          <h1 className="todo-list-page-title">{t('todo.myTodos')}</h1>
           <Button variant="primary" onClick={() => setIsCreateModalOpen(true)}>
-            + 새 할일 등록
+            {t('todo.newTodo')}
           </Button>
         </div>
 
@@ -79,7 +81,7 @@ export default function TodoListPage() {
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        title="새 할일 등록"
+        title={t('todo.createTitle')}
       >
         <TodoCreateForm
           onSuccess={() => setIsCreateModalOpen(false)}

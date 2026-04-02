@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from '@/hooks/useTranslation';
 import './Modal.css';
 
 interface ModalProps {
@@ -17,9 +18,14 @@ export default function Modal({
   onConfirm,
   title,
   children,
-  confirmText = '확인',
-  cancelText = '취소',
+  confirmText,
+  cancelText,
 }: ModalProps) {
+  const { t } = useTranslation();
+
+  const resolvedConfirmText = confirmText ?? t('common.confirm');
+  const resolvedCancelText = cancelText ?? t('common.cancel');
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -54,10 +60,10 @@ export default function Modal({
         {onConfirm ? (
           <div className="modal-footer">
             <button className="modal-btn modal-btn-cancel" onClick={onClose}>
-              {cancelText}
+              {resolvedCancelText}
             </button>
             <button className="modal-btn modal-btn-confirm" onClick={onConfirm}>
-              {confirmText}
+              {resolvedConfirmText}
             </button>
           </div>
         ) : null}

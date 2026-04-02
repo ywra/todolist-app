@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Input from '@/components/common/Input';
 import Button from '@/components/common/Button';
 import { useLogin } from '@/hooks/useAuth';
+import { useTranslation } from '@/hooks/useTranslation';
 import './LoginForm.css';
 
 interface FormFields {
@@ -21,6 +22,7 @@ export default function LoginForm() {
   const [serverError, setServerError] = useState<string>('');
 
   const { mutate: login, isPending } = useLogin();
+  const { t } = useTranslation();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -35,8 +37,8 @@ export default function LoginForm() {
     e.preventDefault();
     setServerError('');
 
-    const emailError = fields.email.trim() === '' ? '이메일을 입력해 주세요.' : '';
-    const passwordError = fields.password === '' ? '비밀번호를 입력해 주세요.' : '';
+    const emailError = fields.email.trim() === '' ? t('validation.emailRequired') : '';
+    const passwordError = fields.password === '' ? t('validation.passwordRequired') : '';
 
     setErrors({ email: emailError, password: passwordError });
 
@@ -50,9 +52,9 @@ export default function LoginForm() {
         onError: (error: unknown) => {
           const axiosError = error as { response?: { status?: number } };
           if (axiosError?.response?.status === 401) {
-            setServerError('이메일 또는 비밀번호가 올바르지 않습니다.');
+            setServerError(t('auth.loginError'));
           } else {
-            setServerError('서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+            setServerError(t('auth.loginError'));
           }
         },
       }
@@ -61,26 +63,26 @@ export default function LoginForm() {
 
   return (
     <div className="auth-card">
-      <h1 className="auth-card__title">로그인</h1>
+      <h1 className="auth-card__title">{t('auth.login')}</h1>
       <form onSubmit={handleSubmit} noValidate>
         <div className="auth-card__fields">
           <Input
-            label="이메일"
+            label={t('auth.email')}
             name="email"
             type="email"
             value={fields.email}
             onChange={handleChange}
-            placeholder="이메일을 입력하세요"
+            placeholder={t('auth.emailPlaceholder')}
             required
             error={errors.email || undefined}
           />
           <Input
-            label="비밀번호"
+            label={t('auth.password')}
             name="password"
             type="password"
             value={fields.password}
             onChange={handleChange}
-            placeholder="비밀번호를 입력하세요"
+            placeholder={t('auth.passwordPlaceholder')}
             required
             error={errors.password || undefined}
           />
@@ -89,14 +91,14 @@ export default function LoginForm() {
         {serverError ? <div className="auth-card__error-box">{serverError}</div> : null}
 
         <Button type="submit" variant="primary" disabled={isPending} loading={isPending} className="auth-card__submit">
-          로그인
+          {t('auth.loginButton')}
         </Button>
       </form>
 
       <p className="auth-card__footer">
-        계정이 없으신가요?
+        {t('auth.noAccount')}
         <Link to="/register" className="auth-card__footer-link">
-          회원 가입
+          {t('auth.goToRegister')}
         </Link>
       </p>
     </div>

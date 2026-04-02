@@ -23,7 +23,7 @@ describe('TodoCreateForm', () => {
 
   it('설명 입력 필드가 렌더링된다', () => {
     renderTodoCreateForm();
-    expect(screen.getByPlaceholderText('상세 설명을 입력하세요')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('설명을 입력하세요')).toBeInTheDocument();
   });
 
   it('시작일/종료일 입력 필드가 렌더링된다', () => {
@@ -43,7 +43,7 @@ describe('TodoCreateForm', () => {
     renderTodoCreateForm();
     fireEvent.click(screen.getByRole('button', { name: '등록하기' }));
     await waitFor(() => {
-      expect(screen.getByText('제목을 입력해주세요.')).toBeInTheDocument();
+      expect(screen.getByText('제목을 입력해 주세요.')).toBeInTheDocument();
     });
   });
 

@@ -1,26 +1,7 @@
 import React from 'react';
 import Select from '@/components/common/Select';
+import { useTranslation } from '@/hooks/useTranslation';
 import './TodoFilter.css';
-
-const STATUS_OPTIONS = [
-  { value: '', label: '전체' },
-  { value: 'pending', label: '시작전' },
-  { value: 'in_progress', label: '진행중' },
-  { value: 'overdue', label: '완료 실패' },
-  { value: 'completed', label: '성공 완료' },
-  { value: 'ended', label: '종료된 할일' },
-];
-
-const SORT_BY_OPTIONS = [
-  { value: 'startDate', label: '시작일' },
-  { value: 'dueDate', label: '종료일' },
-  { value: 'createdAt', label: '생성일' },
-];
-
-const SORT_ORDER_OPTIONS = [
-  { value: 'asc', label: '오름차순' },
-  { value: 'desc', label: '내림차순' },
-];
 
 interface TodoFilterProps {
   status: string;
@@ -39,6 +20,28 @@ export default function TodoFilter({
   onSortByChange,
   onSortOrderChange,
 }: TodoFilterProps) {
+  const { t } = useTranslation();
+
+  const STATUS_OPTIONS = [
+    { value: '', label: t('filter.all') },
+    { value: 'pending', label: t('filter.pending') },
+    { value: 'in_progress', label: t('filter.inProgress') },
+    { value: 'overdue', label: t('filter.overdue') },
+    { value: 'completed', label: t('filter.completed') },
+    { value: 'ended', label: t('filter.closed') },
+  ];
+
+  const SORT_BY_OPTIONS = [
+    { value: 'startDate', label: t('filter.startDate') },
+    { value: 'dueDate', label: t('filter.dueDate') },
+    { value: 'createdAt', label: t('filter.createdAt') },
+  ];
+
+  const SORT_ORDER_OPTIONS = [
+    { value: 'asc', label: t('filter.asc') },
+    { value: 'desc', label: t('filter.desc') },
+  ];
+
   const handleStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onStatusChange(e.target.value);
   };
@@ -63,7 +66,7 @@ export default function TodoFilter({
         />
       </div>
       <div className="todo-filter-group">
-        <span className="todo-filter-label">정렬</span>
+        <span className="todo-filter-label">{t('filter.sortBy')}</span>
         <Select
           options={SORT_BY_OPTIONS}
           value={sortBy}

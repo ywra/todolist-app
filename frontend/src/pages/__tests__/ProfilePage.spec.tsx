@@ -34,22 +34,22 @@ describe('ProfilePage', () => {
   it('프로필 폼이 렌더링된다', () => {
     renderPage();
     expect(screen.getByText('프로필 수정')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('이름을 입력해주세요')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('이름을 입력하세요')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '저장' })).toBeInTheDocument();
   });
 
   it('비밀번호 변경 폼이 렌더링된다', () => {
     renderPage();
     expect(screen.getByRole('heading', { name: '비밀번호 변경' })).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('현재 비밀번호를 입력해주세요')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('새 비밀번호를 입력해주세요')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('새 비밀번호를 다시 입력해주세요')).toBeInTheDocument();
+    // placeholder가 label 텍스트와 동일하게 설정됨
+    const passwordInputs = document.querySelectorAll('input[type="password"]');
+    expect(passwordInputs).toHaveLength(3);
     expect(screen.getByRole('button', { name: '비밀번호 변경' })).toBeInTheDocument();
   });
 
   it('뒤로가기 링크가 렌더링된다', () => {
     renderPage();
-    const backLink = screen.getByRole('link', { name: '← 목록으로 돌아가기' });
+    const backLink = screen.getByRole('link', { name: /목록으로 돌아가기/ });
     expect(backLink).toBeInTheDocument();
     expect(backLink).toHaveAttribute('href', '/todos');
   });

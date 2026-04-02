@@ -7,11 +7,13 @@ import StatusBadge from '@/components/common/StatusBadge';
 import TodoEditForm from '@/components/todo/TodoEditForm';
 import { useTodoDetail, useCompleteTodo, useIncompleteTodo, useDeleteTodo } from '@/hooks/useTodos';
 import { formatDate } from '@/utils/date-utils';
+import { useTranslation } from '@/hooks/useTranslation';
 import './TodoDetailPage.css';
 
 export default function TodoDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -56,7 +58,7 @@ export default function TodoDetailPage() {
     return (
       <Layout>
         <div className="todo-detail-state">
-          <span>불러오는 중...</span>
+          <span>{t('common.loading')}</span>
         </div>
       </Layout>
     );
@@ -66,9 +68,9 @@ export default function TodoDetailPage() {
     return (
       <Layout>
         <div className="todo-detail-state">
-          <p className="todo-detail-not-found">할일을 찾을 수 없습니다. (404)</p>
+          <p className="todo-detail-not-found">{t('todo.notFound')}</p>
           <Link to="/todos" className="todo-detail-back-link">
-            ← 목록으로 돌아가기
+            ← {t('common.back')}
           </Link>
         </div>
       </Layout>
@@ -79,7 +81,7 @@ export default function TodoDetailPage() {
     <Layout>
       <div className="todo-detail-page">
         <Link to="/todos" className="todo-detail-back-link">
-          ← 목록으로 돌아가기
+          ← {t('common.back')}
         </Link>
 
         <div className="todo-detail-card">
@@ -87,10 +89,10 @@ export default function TodoDetailPage() {
             <StatusBadge status={todo.status} />
             <div className="todo-detail-card-actions">
               <Button variant="secondary" size="sm" onClick={() => setIsEditModalOpen(true)}>
-                수정
+                {t('common.edit')}
               </Button>
               <Button variant="danger" size="sm" onClick={() => setIsDeleteModalOpen(true)}>
-                삭제
+                {t('common.delete')}
               </Button>
             </div>
           </div>
@@ -99,7 +101,7 @@ export default function TodoDetailPage() {
           <hr className="todo-detail-divider" />
 
           <section className="todo-detail-section">
-            <h2 className="todo-detail-section-label">설명</h2>
+            <h2 className="todo-detail-section-label">{t('todo.description')}</h2>
             <p className="todo-detail-description">
               {todo.description || '-'}
             </p>
@@ -108,11 +110,11 @@ export default function TodoDetailPage() {
 
           <section className="todo-detail-section todo-detail-dates">
             <div>
-              <span className="todo-detail-section-label">시작일</span>
+              <span className="todo-detail-section-label">{t('todo.startDate')}</span>
               <span className="todo-detail-date-value">{formatDate(todo.startDate)}</span>
             </div>
             <div>
-              <span className="todo-detail-section-label">종료일</span>
+              <span className="todo-detail-section-label">{t('todo.dueDate')}</span>
               <span className="todo-detail-date-value">{formatDate(todo.dueDate)}</span>
             </div>
           </section>
@@ -120,11 +122,11 @@ export default function TodoDetailPage() {
 
           <section className="todo-detail-section todo-detail-meta">
             <div>
-              <span className="todo-detail-section-label">생성일시</span>
+              <span className="todo-detail-section-label">{t('todo.createdAt')}</span>
               <span className="todo-detail-meta-value">{formatDateTime(todo.createdAt)}</span>
             </div>
             <div>
-              <span className="todo-detail-section-label">최종 수정일시</span>
+              <span className="todo-detail-section-label">{t('todo.updatedAt')}</span>
               <span className="todo-detail-meta-value">{formatDateTime(todo.updatedAt)}</span>
             </div>
           </section>
@@ -136,7 +138,7 @@ export default function TodoDetailPage() {
               onClick={handleToggleComplete}
               loading={completeTodo.isPending || incompleteTodo.isPending}
             >
-              {todo.isCompleted ? '완료 취소' : '완료 처리'}
+              {todo.isCompleted ? t('todo.incomplete') : t('todo.complete')}
             </Button>
           </div>
         </div>
@@ -145,7 +147,7 @@ export default function TodoDetailPage() {
       <Modal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        title="할일 수정"
+        title={t('todo.editTitle')}
       >
         <TodoEditForm
           todo={todo}
@@ -158,9 +160,9 @@ export default function TodoDetailPage() {
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleDeleteConfirm}
-        title="할일 삭제"
-        confirmText="삭제"
-        cancelText="취소"
+        title={t('common.delete')}
+        confirmText={t('common.delete')}
+        cancelText={t('common.cancel')}
       >
         <p>"{todo.title}"을(를) 삭제하시겠습니까?</p>
       </Modal>

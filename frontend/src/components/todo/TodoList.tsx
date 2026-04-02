@@ -3,6 +3,7 @@ import { useTodos } from '@/hooks/useTodos';
 import TodoItem from './TodoItem';
 import TodoEditForm from './TodoEditForm';
 import Modal from '@/components/common/Modal';
+import { useTranslation } from '@/hooks/useTranslation';
 import type { Todo, TodoFilterParams } from '@/types/todo-types';
 import './TodoList.css';
 
@@ -13,11 +14,12 @@ interface TodoListProps {
 export default function TodoList({ params }: TodoListProps) {
   const { data, isLoading, isError } = useTodos(params);
   const [editTodo, setEditTodo] = useState<Todo | null>(null);
+  const { t } = useTranslation();
 
   if (isLoading) {
     return (
       <div className="todo-list-state">
-        <span className="todo-list-loading">불러오는 중...</span>
+        <span className="todo-list-loading">{t('common.loading')}</span>
       </div>
     );
   }
@@ -25,7 +27,7 @@ export default function TodoList({ params }: TodoListProps) {
   if (isError) {
     return (
       <div className="todo-list-state">
-        <span className="todo-list-error">목록을 불러오지 못했습니다.</span>
+        <span className="todo-list-error">{t('todo.notFound')}</span>
       </div>
     );
   }
@@ -35,7 +37,7 @@ export default function TodoList({ params }: TodoListProps) {
   if (todos.length === 0) {
     return (
       <div className="todo-list-state">
-        <span className="todo-list-empty">등록된 할일이 없습니다.</span>
+        <span className="todo-list-empty">{t('todo.empty')}</span>
       </div>
     );
   }
@@ -45,10 +47,10 @@ export default function TodoList({ params }: TodoListProps) {
       <div className="todo-list">
         <div className="todo-list-header">
           <span />
-          <span className="todo-list-col-label">제목</span>
-          <span className="todo-list-col-label">상태</span>
-          <span className="todo-list-col-label">시작일</span>
-          <span className="todo-list-col-label">종료일</span>
+          <span className="todo-list-col-label">{t('todo.title')}</span>
+          <span className="todo-list-col-label">{t('filter.all')}</span>
+          <span className="todo-list-col-label">{t('todo.startDate')}</span>
+          <span className="todo-list-col-label">{t('todo.dueDate')}</span>
           <span />
         </div>
         {todos.map((todo) => (
@@ -60,7 +62,7 @@ export default function TodoList({ params }: TodoListProps) {
         <Modal
           isOpen={true}
           onClose={() => setEditTodo(null)}
-          title="할일 수정"
+          title={t('todo.editTitle')}
         >
           <TodoEditForm
             todo={editTodo}

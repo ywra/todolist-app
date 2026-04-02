@@ -4,6 +4,7 @@ import Input from '@/components/common/Input';
 import Button from '@/components/common/Button';
 import { useRegister } from '@/hooks/useAuth';
 import { validateName, validateEmail, validatePassword } from '@/utils/validation-utils';
+import { useTranslation } from '@/hooks/useTranslation';
 import './RegisterForm.css';
 
 interface FormFields {
@@ -24,12 +25,14 @@ export default function RegisterForm() {
   const [serverError, setServerError] = useState<string>('');
 
   const { mutate: register, isPending } = useRegister();
+  const { t } = useTranslation();
 
   function validateField(name: keyof FormFields, value: string): string {
-    if (name === 'name') return validateName(value) ?? '';
-    if (name === 'email') return validateEmail(value) ?? '';
-    if (name === 'password') return validatePassword(value) ?? '';
-    return '';
+    let key: string | null = null;
+    if (name === 'name') key = validateName(value);
+    else if (name === 'email') key = validateEmail(value);
+    else if (name === 'password') key = validatePassword(value);
+    return key ? t(key) : '';
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -59,9 +62,9 @@ export default function RegisterForm() {
         onError: (error: unknown) => {
           const axiosError = error as { response?: { status?: number } };
           if (axiosError?.response?.status === 409) {
-            setServerError('이미 사용 중인 이메일입니다.');
+            setServerError(t('auth.duplicateEmail'));
           } else {
-            setServerError('서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+            setServerError(t('auth.loginError'));
           }
         },
       }
@@ -70,55 +73,55 @@ export default function RegisterForm() {
 
   return (
     <div className="auth-card">
-      <h1 className="auth-card__title">회원 가입</h1>
+      <h1 className="auth-card__title">{t('auth.register')}</h1>
       <form onSubmit={handleSubmit} noValidate>
         <div className="auth-card__fields">
           <Input
-            label="이름"
+            label={t('auth.name')}
             name="name"
             type="text"
             value={fields.name}
             onChange={handleChange}
-            placeholder="이름을 입력하세요"
+            placeholder={t('auth.namePlaceholder')}
             required
             error={errors.name || undefined}
           />
           <Input
-            label="이메일"
+            label={t('auth.email')}
             name="email"
             type="email"
             value={fields.email}
             onChange={handleChange}
-            placeholder="이메일을 입력하세요"
+            placeholder={t('auth.emailPlaceholder')}
             required
             error={errors.email || undefined}
           />
           <div>
             <Input
-              label="비밀번호"
+              label={t('auth.password')}
               name="password"
               type="password"
               value={fields.password}
               onChange={handleChange}
-              placeholder="비밀번호를 입력하세요"
+              placeholder={t('auth.passwordPlaceholder')}
               required
               error={errors.password || undefined}
             />
-            <p className="auth-card__password-hint">8자 이상, 영문+숫자+특수문자 포함</p>
+            <p className="auth-card__password-hint">{t('auth.passwordPolicy')}</p>
           </div>
         </div>
 
         {serverError ? <div className="auth-card__error-box">{serverError}</div> : null}
 
         <Button type="submit" variant="primary" disabled={isPending} loading={isPending} className="auth-card__submit">
-          가입하기
+          {t('auth.registerButton')}
         </Button>
       </form>
 
       <p className="auth-card__footer">
-        이미 계정이 있으신가요?
+        {t('auth.hasAccount')}
         <Link to="/login" className="auth-card__footer-link">
-          로그인
+          {t('auth.goToLogin')}
         </Link>
       </p>
     </div>

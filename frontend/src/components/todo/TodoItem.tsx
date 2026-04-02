@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import StatusBadge from '@/components/common/StatusBadge';
 import Modal from '@/components/common/Modal';
 import { useCompleteTodo, useIncompleteTodo, useDeleteTodo } from '@/hooks/useTodos';
+import { useTranslation } from '@/hooks/useTranslation';
 import type { Todo } from '@/types/todo-types';
 import './TodoItem.css';
 
@@ -16,6 +17,7 @@ export default function TodoItem({ todo, onEditClick }: TodoItemProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   const completeTodo = useCompleteTodo();
   const incompleteTodo = useIncompleteTodo();
@@ -97,7 +99,7 @@ export default function TodoItem({ todo, onEditClick }: TodoItemProps) {
                   onEditClick(todo);
                 }}
               >
-                수정
+                {t('common.edit')}
               </button>
               <button
                 type="button"
@@ -107,7 +109,7 @@ export default function TodoItem({ todo, onEditClick }: TodoItemProps) {
                   setDeleteModalOpen(true);
                 }}
               >
-                삭제
+                {t('common.delete')}
               </button>
             </div>
           ) : null}
@@ -118,9 +120,9 @@ export default function TodoItem({ todo, onEditClick }: TodoItemProps) {
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handleDeleteConfirm}
-        title="할일 삭제"
-        confirmText="삭제"
-        cancelText="취소"
+        title={t('common.delete')}
+        confirmText={t('common.delete')}
+        cancelText={t('common.cancel')}
       >
         <p>"{todo.title}"을(를) 삭제하시겠습니까?</p>
       </Modal>

@@ -31,7 +31,8 @@ describe('Header', () => {
 
   it('비인증 상태에서는 사용자명과 로그아웃 버튼이 표시되지 않는다', () => {
     renderHeader();
-    expect(screen.queryByText('로그아웃')).not.toBeInTheDocument();
+    // locale에 따라 텍스트가 바뀌므로 logout 버튼 자체가 없음을 확인
+    expect(screen.queryByRole('button', { name: /로그아웃|Logout|ログアウト/ })).not.toBeInTheDocument();
   });
 
   it('인증 상태에서 사용자명이 표시된다', () => {
@@ -56,13 +57,13 @@ describe('Header', () => {
 
   it('테마 토글 버튼이 항상 표시된다', () => {
     renderHeader();
-    expect(screen.getByRole('button', { name: /다크 모드로 전환|라이트 모드로 전환/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Switch to (dark|light) mode/ })).toBeInTheDocument();
   });
 
   it('라이트 모드일 때 토글 버튼에 🌙 아이콘이 표시된다', () => {
     useThemeStore.setState({ theme: 'light' });
     renderHeader();
-    const btn = screen.getByRole('button', { name: '다크 모드로 전환' });
+    const btn = screen.getByRole('button', { name: 'Switch to dark mode' });
     expect(btn).toBeInTheDocument();
     expect(btn.textContent).toBe('🌙');
   });
@@ -70,7 +71,7 @@ describe('Header', () => {
   it('다크 모드일 때 토글 버튼에 ☀️ 아이콘이 표시된다', () => {
     useThemeStore.setState({ theme: 'dark' });
     renderHeader();
-    const btn = screen.getByRole('button', { name: '라이트 모드로 전환' });
+    const btn = screen.getByRole('button', { name: 'Switch to light mode' });
     expect(btn).toBeInTheDocument();
     expect(btn.textContent).toBe('☀️');
   });
@@ -78,7 +79,7 @@ describe('Header', () => {
   it('테마 토글 버튼 클릭 시 테마가 변경된다', () => {
     useThemeStore.setState({ theme: 'light' });
     renderHeader();
-    const btn = screen.getByRole('button', { name: '다크 모드로 전환' });
+    const btn = screen.getByRole('button', { name: 'Switch to dark mode' });
     fireEvent.click(btn);
     expect(useThemeStore.getState().theme).toBe('dark');
   });
