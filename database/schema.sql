@@ -53,7 +53,23 @@ CREATE TABLE rewards (
 );
 
 -- ============================================
--- 4. 인덱스
+-- 4. daily_todos 테이블
+-- ============================================
+CREATE TABLE daily_todos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(200) NOT NULL,
+    description VARCHAR(2000),
+    start_date DATE NOT NULL,
+    due_date DATE NOT NULL CHECK (due_date >= start_date),
+    is_completed BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- 5. 인덱스
 -- ============================================
 CREATE INDEX idx_todos_user_id ON todos(user_id);
 CREATE INDEX idx_rewards_user_id ON rewards(user_id);
+CREATE INDEX idx_daily_todos_user_id ON daily_todos(user_id);

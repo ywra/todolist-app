@@ -1,13 +1,18 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import Layout from '@/components/layout/Layout';
 import Button from '@/components/common/Button';
+import Input from '@/components/common/Input';
+import TextArea from '@/components/common/TextArea';
 import Modal from '@/components/common/Modal';
-import TodoItem from '@/components/todo/TodoItem';
-import TodoCreateForm from '@/components/todo/TodoCreateForm';
-import { useDailyTodos } from '@/hooks/useTodos';
+import DailyTodoItem from '@/components/todo/DailyTodoItem';
+import { useDailyTodos, useCreateDailyTodo } from '@/hooks/useDailyTodos';
 import { useTranslation } from '@/hooks/useTranslation';
-import type { Todo } from '@/types/todo-types';
+import {
+  validateTodoTitle,
+  validateTodoDescription,
+  validateDateRange,
+} from '@/utils/validation-utils';
+import type { DailyTodo } from '@/types/daily-todo-types';
 import './DailyTodoPage.css';
 
 function getTodayString(): string {
@@ -25,19 +30,122 @@ function formatKoreanDate(date: Date): string {
   return `${year}년 ${month}월 ${day}일`;
 }
 
+interface DailyTodoCreateFormProps {
+  onSuccess: () => void;
+  onCancel: () => void;
+}
+
+function DailyTodoCreateForm({ onSuccess, onCancel }: DailyTodoCreateFormProps) {
+  const today = getTodayString();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [startDate, setStartDate] = useState(today);
+  const [dueDate, setDueDate] = useState(today);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const { t } = useTranslation();
+
+  const createDailyTodo = useCreateDailyTodo();
+
+  const validate = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    const titleKey = validateTodoTitle(title);
+    if (titleKey) newErrors['title'] = t(titleKey);
+
+    const descKey = validateTodoDescription(description);
+    if (descKey) newErrors['description'] = t(descKey);
+
+    const dateKey = validateDateRange(startDate, dueDate);
+    if (dateKey) newErrors['date'] = t(dateKey);
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    createDailyTodo.mutate(
+      {
+        title: title.trim(),
+        description: description.trim() || null,
+        startDate,
+        dueDate,
+      },
+      {
+        onSuccess: () => {
+          onSuccess();
+        },
+      },
+    );
+  };
+
+  return (
+    <form className="todo-create-form" onSubmit={handleSubmit} noValidate>
+      <Input
+        label={t('todo.title')}
+        required
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        error={errors['title']}
+        placeholder={t('todo.titlePlaceholder')}
+        name="title"
+      />
+
+      <TextArea
+        label={t('todo.description')}
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        error={errors['description']}
+        placeholder={t('todo.descriptionPlaceholder')}
+        maxLength={2000}
+        name="description"
+      />
+
+      <div className="todo-create-form-dates">
+        <Input
+          label={t('todo.startDate')}
+          type="date"
+          required
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          name="startDate"
+        />
+        <Input
+          label={t('todo.dueDate')}
+          type="date"
+          required
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+          name="dueDate"
+        />
+      </div>
+
+      {errors['date'] ? (
+        <p className="todo-create-form-error">{errors['date']}</p>
+      ) : null}
+
+      <div className="todo-create-form-actions">
+        <Button variant="secondary" type="button" onClick={onCancel}>
+          {t('common.cancel')}
+        </Button>
+        <Button variant="primary" type="submit" loading={createDailyTodo.isPending}>
+          {t('todo.register')}
+        </Button>
+      </div>
+    </form>
+  );
+}
+
 export default function DailyTodoPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { data, isLoading } = useDailyTodos();
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
-  const todos: Todo[] = data?.data ?? [];
+  const todos: DailyTodo[] = data?.data ?? [];
   const pending = todos.filter((todo) => !todo.isCompleted);
   const completed = todos.filter((todo) => todo.isCompleted);
-
-  const handleEditClick = (todo: Todo) => {
-    navigate(`/todos/${todo.id}`);
-  };
 
   return (
     <Layout>
@@ -67,7 +175,7 @@ export default function DailyTodoPage() {
               <section className="daily-todo-section">
                 <div className="daily-todo-section-list">
                   {pending.map((todo) => (
-                    <TodoItem key={todo.id} todo={todo} onEditClick={handleEditClick} />
+                    <DailyTodoItem key={todo.id} todo={todo} />
                   ))}
                 </div>
               </section>
@@ -80,7 +188,7 @@ export default function DailyTodoPage() {
                 </h2>
                 <div className="daily-todo-section-list">
                   {completed.map((todo) => (
-                    <TodoItem key={todo.id} todo={todo} onEditClick={handleEditClick} />
+                    <DailyTodoItem key={todo.id} todo={todo} />
                   ))}
                 </div>
               </section>
@@ -100,11 +208,9 @@ export default function DailyTodoPage() {
         onClose={() => setCreateModalOpen(false)}
         title={t('todo.createTitle')}
       >
-        <TodoCreateForm
+        <DailyTodoCreateForm
           onSuccess={() => setCreateModalOpen(false)}
           onCancel={() => setCreateModalOpen(false)}
-          defaultStartDate={getTodayString()}
-          defaultDueDate={getTodayString()}
         />
       </Modal>
     </Layout>

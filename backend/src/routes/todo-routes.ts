@@ -8,7 +8,6 @@ router.use(authMiddleware);
 
 router.post('/', todoController.createTodo);
 router.get('/', todoController.getTodos);
-router.get('/daily', todoController.getDailyTodos);
 router.get('/:id', todoController.getTodoById);
 router.put('/:id', todoController.updateTodo);
 router.patch('/:id/complete', todoController.completeTodo);

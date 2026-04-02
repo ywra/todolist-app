@@ -3,7 +3,6 @@ import {
   completeTodo,
   createTodo,
   deleteTodo,
-  getDailyTodos,
   getTodoById,
   getTodos,
   incompleteTodo,
@@ -15,13 +14,6 @@ export function useTodos(params: TodoFilterParams) {
   return useQuery({
     queryKey: ['todos', params],
     queryFn: () => getTodos(params),
-  });
-}
-
-export function useDailyTodos() {
-  return useQuery({
-    queryKey: ['todos', 'daily'],
-    queryFn: () => getDailyTodos(),
   });
 }
 

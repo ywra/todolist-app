@@ -7,6 +7,7 @@ import type {
 } from '@/types/todo-types';
 import type { ApiResponse, ApiListResponse } from '@/types/api-types';
 
+
 export const getTodos = async (
   params: TodoFilterParams,
 ): Promise<ApiListResponse<Todo>> => {
@@ -46,9 +47,4 @@ export const incompleteTodo = async (id: string): Promise<ApiResponse<Todo>> => 
 
 export const deleteTodo = async (id: string): Promise<void> => {
   await apiClient.delete(`/todos/${id}`);
-};
-
-export const getDailyTodos = async (): Promise<ApiResponse<Todo[]>> => {
-  const response = await apiClient.get<ApiResponse<Todo[]>>('/todos/daily');
-  return response.data;
 };

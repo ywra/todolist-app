@@ -131,7 +131,7 @@ export async function markAchieved(id: string): Promise<Reward> {
 export async function getCompletedCount(userId: string): Promise<number> {
   const sql = `
     SELECT COUNT(*) AS total
-    FROM todos
+    FROM daily_todos
     WHERE user_id = $1 AND is_completed = true
   `;
   const result: QueryResult<{ total: string }> = await pool.query(sql, [userId]);

@@ -208,9 +208,9 @@ describe('PUT /api/rewards/:id - 보상 수정', () => {
 });
 
 // ----------------------------------------------------------------
-// 할일 10개 완료 후 자동 달성 확인
+// 오늘의 할일 10개 완료 후 자동 달성 확인
 // ----------------------------------------------------------------
-describe('할일 10개 완료 후 자동 달성 확인', () => {
+describe('오늘의 할일 10개 완료 후 자동 달성 확인', () => {
   let autoTokenB: string;
 
   beforeAll(async () => {
@@ -233,19 +233,19 @@ describe('할일 10개 완료 후 자동 달성 확인', () => {
       .set(authHeader(autoTokenB))
       .send({ milestone: 10, title: '자동 달성 보상' });
 
-    // 할일 10개 생성 후 완료 처리
+    // 오늘의 할일 10개 생성 후 완료 처리
     for (let i = 0; i < 10; i++) {
       const createRes = await request(app)
-        .post('/api/todos')
+        .post('/api/daily-todos')
         .set(authHeader(autoTokenB))
         .send({
-          title: `자동달성 할일 ${i + 1}`,
+          title: `자동달성 오늘의 할일 ${i + 1}`,
           startDate: '2026-01-01',
-          dueDate: '2026-12-31',
+          dueDate: '2099-12-31',
         });
       const todoId = createRes.body.data.id as string;
       await request(app)
-        .patch(`/api/todos/${todoId}/complete`)
+        .patch(`/api/daily-todos/${todoId}/complete`)
         .set(authHeader(autoTokenB));
     }
   });
