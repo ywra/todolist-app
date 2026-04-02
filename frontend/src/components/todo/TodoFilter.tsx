@@ -57,7 +57,7 @@ export default function TodoFilter({
   return (
     <div className="todo-filter">
       <div className="todo-filter-group">
-        <span className="todo-filter-label">필터</span>
+        <span className="todo-filter-label">{t('filter.label')}</span>
         <Select
           options={STATUS_OPTIONS}
           value={status}

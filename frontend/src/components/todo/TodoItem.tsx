@@ -4,12 +4,20 @@ import StatusBadge from '@/components/common/StatusBadge';
 import Modal from '@/components/common/Modal';
 import { useCompleteTodo, useIncompleteTodo, useDeleteTodo } from '@/hooks/useTodos';
 import { useTranslation } from '@/hooks/useTranslation';
+import { formatDate } from '@/utils/date-utils';
 import type { Todo } from '@/types/todo-types';
 import './TodoItem.css';
 
 interface TodoItemProps {
   todo: Todo;
   onEditClick: (todo: Todo) => void;
+}
+
+function formatDateSafe(dateStr: string): string {
+  // ISO 문자열(2026-04-01T15:00:00.000Z)이면 YYYY-MM-DD 부분만 추출
+  const isoMatch = dateStr.match(/^(\d{4}-\d{2}-\d{2})/);
+  const normalized = isoMatch ? isoMatch[1] : dateStr;
+  return formatDate(normalized);
 }
 
 export default function TodoItem({ todo, onEditClick }: TodoItemProps) {
@@ -62,7 +70,7 @@ export default function TodoItem({ todo, onEditClick }: TodoItemProps) {
           className="todo-item-checkbox"
           checked={todo.isCompleted}
           onChange={handleCheckbox}
-          aria-label={`${todo.title} 완료 토글`}
+          aria-label={`${todo.title} ${t('todo.complete')}`}
         />
 
         <button
@@ -77,15 +85,15 @@ export default function TodoItem({ todo, onEditClick }: TodoItemProps) {
           <StatusBadge status={todo.status} />
         </div>
 
-        <span className="todo-item-date">{todo.startDate}</span>
-        <span className="todo-item-date">{todo.dueDate}</span>
+        <span className="todo-item-date">{formatDateSafe(todo.startDate)}</span>
+        <span className="todo-item-date">{formatDateSafe(todo.dueDate)}</span>
 
         <div className="todo-item-menu" ref={menuRef}>
           <button
             type="button"
             className="todo-item-menu-btn"
             onClick={() => setMenuOpen((prev) => !prev)}
-            aria-label="더보기 메뉴"
+            aria-label={t('common.edit')}
           >
             ⋯
           </button>
@@ -124,7 +132,8 @@ export default function TodoItem({ todo, onEditClick }: TodoItemProps) {
         confirmText={t('common.delete')}
         cancelText={t('common.cancel')}
       >
-        <p>"{todo.title}"을(를) 삭제하시겠습니까?</p>
+        <p>{t('todo.deleteConfirm')}</p>
+        <p>{t('todo.deleteWarning')}</p>
       </Modal>
     </>
   );

@@ -54,6 +54,7 @@ export const ko = {
     updatedAt: '최종 수정일시',
   },
   filter: {
+    label: '필터',
     all: '전체',
     pending: '시작전',
     inProgress: '진행중',

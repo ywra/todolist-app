@@ -56,6 +56,7 @@ export const en: Translations = {
     updatedAt: 'Updated At',
   },
   filter: {
+    label: 'Filter',
     all: 'All',
     pending: 'Pending',
     inProgress: 'In Progress',

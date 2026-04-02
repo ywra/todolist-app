@@ -56,6 +56,7 @@ export const ja: Translations = {
     updatedAt: '最終更新日時',
   },
   filter: {
+    label: 'フィルター',
     all: 'すべて',
     pending: '未開始',
     inProgress: '進行中',

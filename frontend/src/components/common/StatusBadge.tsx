@@ -1,22 +1,30 @@
 import { TodoStatus } from '@/types/todo-types';
+import { useTranslation } from '@/hooks/useTranslation';
 import './StatusBadge.css';
 
 interface StatusBadgeProps {
   status: TodoStatus;
 }
 
-const STATUS_CONFIG: Record<TodoStatus, { label: string; className: string }> = {
-  [TodoStatus.PENDING]: { label: '시작전', className: 'badge-pending' },
-  [TodoStatus.IN_PROGRESS]: { label: '진행중', className: 'badge-in-progress' },
-  [TodoStatus.OVERDUE]: { label: '완료 실패', className: 'badge-overdue' },
-  [TodoStatus.COMPLETED]: { label: '성공 완료', className: 'badge-completed' },
+const STATUS_CLASS: Record<TodoStatus, string> = {
+  [TodoStatus.PENDING]: 'badge-pending',
+  [TodoStatus.IN_PROGRESS]: 'badge-in-progress',
+  [TodoStatus.OVERDUE]: 'badge-overdue',
+  [TodoStatus.COMPLETED]: 'badge-completed',
+};
+
+const STATUS_I18N_KEY: Record<TodoStatus, string> = {
+  [TodoStatus.PENDING]: 'status.pending',
+  [TodoStatus.IN_PROGRESS]: 'status.in_progress',
+  [TodoStatus.OVERDUE]: 'status.overdue',
+  [TodoStatus.COMPLETED]: 'status.completed',
 };
 
 export default function StatusBadge({ status }: StatusBadgeProps) {
-  const config = STATUS_CONFIG[status];
+  const { t } = useTranslation();
   return (
-    <span className={`status-badge ${config.className}`}>
-      {config.label}
+    <span className={`status-badge ${STATUS_CLASS[status]}`}>
+      {t(STATUS_I18N_KEY[status])}
     </span>
   );
 }
