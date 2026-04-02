@@ -48,6 +48,12 @@
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
   font-weight: 500;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.header-username:hover {
+  color: var(--color-primary);
 }
 
 .header-logout-btn {

@@ -20,3 +20,12 @@ export interface RegisterRequest {
   password: string;
   name: string;
 }
+
+export interface UpdateProfileRequest {
+  name: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}

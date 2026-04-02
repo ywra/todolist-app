@@ -86,3 +86,41 @@ export async function findById(id: string): Promise<User | null> {
 
   return mapRowToUser(row);
 }
+
+export async function updateUser(id: string, name: string): Promise<User> {
+  const sql = `
+    UPDATE users SET name=$2 WHERE id=$1
+    RETURNING id, email, name, created_at
+  `;
+
+  const result: QueryResult<UserRow> = await pool.query(sql, [id, name]);
+
+  const row = result.rows[0];
+  if (!row) {
+    throw new Error('사용자 업데이트에 실패했습니다.');
+  }
+
+  return mapRowToUser(row);
+}
+
+export async function updatePassword(id: string, hashedPassword: string): Promise<void> {
+  const sql = `UPDATE users SET password=$2 WHERE id=$1`;
+  await pool.query(sql, [id, hashedPassword]);
+}
+
+export async function findByIdWithPassword(id: string): Promise<UserWithPassword | null> {
+  const sql = `
+    SELECT id, email, password, name, created_at
+    FROM users
+    WHERE id = $1
+  `;
+
+  const result: QueryResult<UserWithPasswordRow> = await pool.query(sql, [id]);
+
+  const row = result.rows[0];
+  if (!row) {
+    return null;
+  }
+
+  return mapRowToUserWithPassword(row);
+}

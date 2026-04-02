@@ -21,7 +21,9 @@ export default function Header() {
         </button>
         {isAuthenticated && user ? (
           <div className="header-auth">
-            <span className="header-username">{user.name}</span>
+            <Link to="/profile" className="header-username">
+              {user.name}
+            </Link>
             <button className="header-logout-btn" onClick={logout}>
               로그아웃
             </button>

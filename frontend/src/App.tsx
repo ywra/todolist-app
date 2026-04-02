@@ -6,6 +6,7 @@ import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
 import TodoListPage from '@/pages/TodoListPage';
 import TodoDetailPage from '@/pages/TodoDetailPage';
+import ProfilePage from '@/pages/ProfilePage';
 
 function App() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -22,6 +23,7 @@ function App() {
       <Route element={<PrivateRoute />}>
         <Route path="/todos" element={<TodoListPage />} />
         <Route path="/todos/:id" element={<TodoDetailPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Route>
 
       {/* 루트 — 인증 상태 기반 리다이렉트 */}

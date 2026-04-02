@@ -7,6 +7,7 @@ interface InputProps {
   error?: string;
   placeholder?: string;
   required?: boolean;
+  disabled?: boolean;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
@@ -18,6 +19,7 @@ export default function Input({
   error,
   placeholder,
   required = false,
+  disabled = false,
   value,
   onChange,
   name,
@@ -37,6 +39,7 @@ export default function Input({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
+        disabled={disabled}
         className={`input-control ${error ? 'input-error' : ''}`}
       />
       {error ? <span className="input-error-msg">{error}</span> : null}

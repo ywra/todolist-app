@@ -2,7 +2,7 @@ import * as userRepository from '../repositories/user-repository';
 import { hashPassword, comparePassword } from '../utils/password-utils';
 import { generateToken } from '../utils/jwt-utils';
 import { AppError, ERROR_CODES } from '../utils/error-utils';
-import { RegisterRequest, LoginRequest, AuthResponse, User } from '../types/auth-types';
+import { RegisterRequest, LoginRequest, AuthResponse, User, UpdateProfileRequest, ChangePasswordRequest } from '../types/auth-types';
 
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 
@@ -52,6 +52,57 @@ export async function register(data: RegisterRequest): Promise<User> {
   const user = await userRepository.createUser(data.email, hashedPassword, data.name);
 
   return user;
+}
+
+export async function getProfile(userId: string): Promise<User> {
+  const user = await userRepository.findById(userId);
+  if (!user) {
+    throw new AppError(ERROR_CODES.NOT_FOUND, '사용자를 찾을 수 없습니다.');
+  }
+  return user;
+}
+
+export async function updateProfile(userId: string, data: UpdateProfileRequest): Promise<User> {
+  const { name } = data;
+
+  if (!name || name.trim().length === 0) {
+    throw new AppError(ERROR_CODES.VALIDATION_ERROR, '이름은 1자 이상 50자 이하이며, 공백만으로 구성될 수 없습니다.');
+  }
+  if (name.length > 50) {
+    throw new AppError(ERROR_CODES.VALIDATION_ERROR, '이름은 1자 이상 50자 이하이며, 공백만으로 구성될 수 없습니다.');
+  }
+
+  return userRepository.updateUser(userId, name);
+}
+
+export async function changePassword(userId: string, data: ChangePasswordRequest): Promise<void> {
+  const { currentPassword, newPassword } = data;
+
+  const userWithPassword = await userRepository.findByIdWithPassword(userId);
+  if (!userWithPassword) {
+    throw new AppError(ERROR_CODES.NOT_FOUND, '사용자를 찾을 수 없습니다.');
+  }
+
+  const isMatch = await comparePassword(currentPassword, userWithPassword.password);
+  if (!isMatch) {
+    throw new AppError(ERROR_CODES.UNAUTHORIZED, '현재 비밀번호가 올바르지 않습니다.');
+  }
+
+  if (!newPassword || newPassword.length < 8) {
+    throw new AppError(ERROR_CODES.VALIDATION_ERROR, '비밀번호는 8자 이상이어야 합니다.');
+  }
+  if (!/[a-zA-Z]/.test(newPassword)) {
+    throw new AppError(ERROR_CODES.VALIDATION_ERROR, '비밀번호는 영문자를 1자 이상 포함해야 합니다.');
+  }
+  if (!/[0-9]/.test(newPassword)) {
+    throw new AppError(ERROR_CODES.VALIDATION_ERROR, '비밀번호는 숫자를 1자 이상 포함해야 합니다.');
+  }
+  if (!/[!@#$%^&*()_+\-=\[\]{}|;':",.<>?/]/.test(newPassword)) {
+    throw new AppError(ERROR_CODES.VALIDATION_ERROR, '비밀번호는 특수문자를 1자 이상 포함해야 합니다.');
+  }
+
+  const hashed = await hashPassword(newPassword);
+  await userRepository.updatePassword(userId, hashed);
 }
 
 export async function login(data: LoginRequest): Promise<AuthResponse> {

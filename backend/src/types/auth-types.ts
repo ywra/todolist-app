@@ -29,3 +29,12 @@ export interface JwtPayload {
   userId: string;
   email: string;
 }
+
+export interface UpdateProfileRequest {
+  name: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}

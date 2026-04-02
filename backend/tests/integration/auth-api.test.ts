@@ -164,4 +164,150 @@ describe('BE-09: Auth API 통합 테스트', () => {
       expect(res.body.error.code).toBe('UNAUTHORIZED');
     });
   });
+
+  // ----------------------------------------------------------------
+  // GET /api/auth/profile
+  // ----------------------------------------------------------------
+  describe('GET /api/auth/profile', () => {
+    let token: string;
+
+    beforeAll(async () => {
+      const loginRes = await request(app).post('/api/auth/login').send({
+        email: TEST_EMAIL,
+        password: TEST_PASSWORD,
+      });
+      token = loginRes.body.data.token as string;
+    });
+
+    it('유효한 토큰으로 프로필 조회 시 200과 user를 반환해야 한다', async () => {
+      const res = await request(app)
+        .get('/api/auth/profile')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.data).toMatchObject({ email: TEST_EMAIL, name: TEST_NAME });
+      expect(res.body.data).toHaveProperty('id');
+      expect(res.body.data).not.toHaveProperty('password');
+    });
+
+    it('토큰 없이 프로필 조회 시 401을 반환해야 한다', async () => {
+      const res = await request(app).get('/api/auth/profile');
+
+      expect(res.status).toBe(401);
+      expect(res.body.success).toBe(false);
+      expect(res.body.error.code).toBe('UNAUTHORIZED');
+    });
+  });
+
+  // ----------------------------------------------------------------
+  // PUT /api/auth/profile
+  // ----------------------------------------------------------------
+  describe('PUT /api/auth/profile', () => {
+    let token: string;
+
+    beforeAll(async () => {
+      const loginRes = await request(app).post('/api/auth/login').send({
+        email: TEST_EMAIL,
+        password: TEST_PASSWORD,
+      });
+      token = loginRes.body.data.token as string;
+    });
+
+    it('유효한 name으로 프로필 수정 시 200과 수정된 user를 반환해야 한다', async () => {
+      const res = await request(app)
+        .put('/api/auth/profile')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ name: '수정된이름' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.data).toMatchObject({ email: TEST_EMAIL, name: '수정된이름' });
+    });
+
+    it('name이 공백만이면 400 VALIDATION_ERROR를 반환해야 한다', async () => {
+      const res = await request(app)
+        .put('/api/auth/profile')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ name: '   ' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+      expect(res.body.error.code).toBe('VALIDATION_ERROR');
+    });
+
+    it('토큰 없이 프로필 수정 시 401을 반환해야 한다', async () => {
+      const res = await request(app).put('/api/auth/profile').send({ name: '누군가' });
+
+      expect(res.status).toBe(401);
+      expect(res.body.success).toBe(false);
+      expect(res.body.error.code).toBe('UNAUTHORIZED');
+    });
+  });
+
+  // ----------------------------------------------------------------
+  // PUT /api/auth/profile/password
+  // ----------------------------------------------------------------
+  describe('PUT /api/auth/profile/password', () => {
+    // 비밀번호 변경 테스트용 별도 계정 사용
+    const PW_TEST_EMAIL = `auth_test_pw_${Date.now()}@example.com`;
+    const ORIGINAL_PW = 'Password1!';
+    let token: string;
+
+    beforeAll(async () => {
+      await request(app).post('/api/auth/register').send({
+        email: PW_TEST_EMAIL,
+        password: ORIGINAL_PW,
+        name: '비번테스트',
+      });
+      const loginRes = await request(app).post('/api/auth/login').send({
+        email: PW_TEST_EMAIL,
+        password: ORIGINAL_PW,
+      });
+      token = loginRes.body.data.token as string;
+    });
+
+    it('올바른 현재 비밀번호와 유효한 새 비밀번호로 변경 성공 시 200을 반환해야 한다', async () => {
+      const res = await request(app)
+        .put('/api/auth/profile/password')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ currentPassword: ORIGINAL_PW, newPassword: 'NewPass2@' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.data.message).toBe('비밀번호가 변경되었습니다.');
+    });
+
+    it('현재 비밀번호가 틀리면 401 UNAUTHORIZED를 반환해야 한다', async () => {
+      const res = await request(app)
+        .put('/api/auth/profile/password')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ currentPassword: 'WrongOld1!', newPassword: 'AnotherNew3#' });
+
+      expect(res.status).toBe(401);
+      expect(res.body.success).toBe(false);
+      expect(res.body.error.code).toBe('UNAUTHORIZED');
+    });
+
+    it('새 비밀번호 정책 위반 시 400 VALIDATION_ERROR를 반환해야 한다', async () => {
+      const res = await request(app)
+        .put('/api/auth/profile/password')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ currentPassword: 'NewPass2@', newPassword: 'weak' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+      expect(res.body.error.code).toBe('VALIDATION_ERROR');
+    });
+
+    it('토큰 없이 비밀번호 변경 시 401을 반환해야 한다', async () => {
+      const res = await request(app)
+        .put('/api/auth/profile/password')
+        .send({ currentPassword: ORIGINAL_PW, newPassword: 'NewPass2@' });
+
+      expect(res.status).toBe(401);
+      expect(res.body.success).toBe(false);
+      expect(res.body.error.code).toBe('UNAUTHORIZED');
+    });
+  });
 });
