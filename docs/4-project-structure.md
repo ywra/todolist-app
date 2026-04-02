@@ -108,8 +108,8 @@ PostgreSQL
 | 레이어 | 역할 | 허용되는 의존 | 금지 사항 |
 |--------|------|---------------|-----------|
 | Route | URL 경로와 HTTP 메서드 매핑, 미들웨어 적용 | Controller | 비즈니스 로직 포함 금지 |
-| Controller | 요청 파라미터 파싱, 입력값 검증, 응답 형식 구성 | Service | DB 직접 접근 금지 |
-| Service | 비즈니스 로직 수행, 트랜잭션 관리 | Repository | HTTP 요청/응답 객체 접근 금지 |
+| Controller | 요청 파라미터 파싱, 응답 형식 구성 | Service | DB 직접 접근 금지, 비즈니스 로직 포함 금지 |
+| Service | 비즈니스 로직 수행, 입력값 유효성 검증, 트랜잭션 관리 | Repository | HTTP 요청/응답 객체 접근 금지 |
 | Repository | SQL 쿼리 작성 및 실행, 데이터 매핑 | pg Pool | 비즈니스 로직 포함 금지 |
 
 ### 2.2 프론트엔드 레이어 구조
@@ -389,9 +389,7 @@ backend/
 │   │   ├── auth-controller.ts
 │   │   └── todo-controller.ts
 │   ├── middlewares/            # Express 미들웨어
-│   │   ├── auth-middleware.ts  # JWT 검증
-│   │   ├── error-middleware.ts # 전역 에러 핸들러
-│   │   └── validation-middleware.ts
+│   │   └── auth-middleware.ts  # JWT 검증
 │   ├── repositories/           # 데이터 접근 (Raw SQL)
 │   │   ├── user-repository.ts
 │   │   └── todo-repository.ts
@@ -424,8 +422,8 @@ backend/
 | 디렉토리 | 역할 |
 |----------|------|
 | `config/` | 환경 변수 로드(`env.ts`)와 PostgreSQL 연결 풀 설정(`db.ts`). `pg.Pool` 인스턴스를 생성하여 Repository에 제공 |
-| `controllers/` | HTTP 요청 파싱, 입력값 검증, Service 호출, 표준 응답 형식 변환. `req`, `res` 객체를 직접 다루는 유일한 레이어 |
-| `middlewares/` | JWT 인증 검증, 전역 에러 핸들링, 요청 유효성 검증 등 횡단 관심사 처리 |
+| `controllers/` | HTTP 요청 파싱, Service 호출, 표준 응답 형식 변환. `req`, `res` 객체를 직접 다루는 유일한 레이어 |
+| `middlewares/` | JWT 인증 검증 등 횡단 관심사 처리. 전역 에러 핸들러는 `app.ts`에 인라인 구현 |
 | `repositories/` | pg 라이브러리를 사용한 Raw SQL 실행. 도메인별 CRUD 쿼리 캡슐화. SQL 외 로직 포함 금지 |
 | `routes/` | Express Router로 URL-HTTP 메서드를 Controller에 매핑. 인증 미들웨어 적용 여부를 이 레이어에서 결정 |
 | `services/` | 비즈니스 규칙(BR-01~BR-09) 구현. 소유권 검증, 날짜 유효성, 상태 산출 등 핵심 로직 담당 |

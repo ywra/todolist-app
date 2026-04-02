@@ -69,7 +69,7 @@
 | 레이어 | 기술 |
 |--------|------|
 | 프론트엔드 | React 19 + TypeScript + Zustand + TanStack Query |
-| 백엔드 | Node.js + Express Framework + pg 라이브러리 |
+| 백엔드 | Node.js + Express 5 + TypeScript + pg 라이브러리 |
 | 데이터베이스 | PostgreSQL |
 | 인증 | JWT (JSON Web Token) 기반 토큰 인증 |
 | ORM/쿼리빌더 | 미사용 (pg 라이브러리로 Raw SQL 직접 작성) |

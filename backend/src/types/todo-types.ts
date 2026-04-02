@@ -38,3 +38,45 @@ export interface TodoFilterOptions {
   page?: number;
   size?: number;
 }
+
+// BE-04 추가 타입
+
+export enum TodoStatusEnum {
+  PENDING = 'pending',
+  IN_PROGRESS = 'in_progress',
+  OVERDUE = 'overdue',
+  COMPLETED = 'completed',
+}
+
+export interface TodoResponse extends Todo {
+  status: TodoStatus;
+}
+
+export interface CreateTodoRequest {
+  title: string;
+  description?: string | null;
+  startDate: string;
+  dueDate: string;
+}
+
+export interface UpdateTodoRequest {
+  title?: string;
+  description?: string | null;
+  startDate?: string;
+  dueDate?: string;
+}
+
+export interface TodoListQuery {
+  page?: number;
+  size?: number;
+  status?: TodoStatus;
+  sortBy?: TodoSortBy;
+  sortOrder?: TodoSortOrder;
+}
+
+export interface PaginationInfo {
+  page: number;
+  size: number;
+  totalCount: number;
+  totalPages: number;
+}

@@ -8,3 +8,24 @@ export interface User {
 export interface UserWithPassword extends User {
   password: string;
 }
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  name: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: User;
+}
+
+export interface JwtPayload {
+  userId: string;
+  email: string;
+}

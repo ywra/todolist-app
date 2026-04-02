@@ -100,7 +100,7 @@
                       "success": false,
                       "error": {
                         "code": "VALIDATION_ERROR",
-                        "message": "유효한 이메일 형식이 아닙니다."
+                        "message": "이메일 형식이 올바르지 않습니다."
                       }
                     }
                   },
@@ -110,7 +110,7 @@
                       "success": false,
                       "error": {
                         "code": "VALIDATION_ERROR",
-                        "message": "비밀번호는 8자 이상이며, 영문·숫자·특수문자를 각 1자 이상 포함해야 합니다."
+                        "message": "비밀번호는 8자 이상이어야 합니다."
                       }
                     }
                   }
@@ -182,30 +182,13 @@
                 "example": {
                   "success": true,
                   "data": {
-                    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
                     "user": {
                       "id": "550e8400-e29b-41d4-a716-446655440000",
                       "name": "홍길동",
                       "email": "hong@example.com",
                       "createdAt": "2026-04-01T09:00:00.000Z"
                     }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "이메일 또는 비밀번호가 입력되지 않은 경우.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "success": false,
-                  "error": {
-                    "code": "VALIDATION_ERROR",
-                    "message": "이메일과 비밀번호를 입력해 주세요."
                   }
                 }
               }
@@ -270,7 +253,7 @@
                 "example": {
                   "success": true,
                   "data": {
-                    "message": "로그아웃되었습니다."
+                    "message": "로그아웃 성공"
                   }
                 }
               }
@@ -734,37 +717,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "할일 삭제 성공.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    { "$ref": "#/components/schemas/SuccessResponse" },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "type": "object",
-                          "properties": {
-                            "message": {
-                              "type": "string",
-                              "description": "삭제 완료 메시지"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
-                },
-                "example": {
-                  "success": true,
-                  "data": {
-                    "message": "할일이 삭제되었습니다."
-                  }
-                }
-              }
-            }
+          "204": {
+            "description": "할일 삭제 성공. 응답 바디 없음."
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -918,7 +872,7 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT",
-        "description": "JWT Access Token을 사용한 Bearer 인증입니다.\n\n로그인(`POST /api/auth/login`) 후 발급된 `accessToken`을 `Authorization: Bearer <token>` 형식으로 헤더에 포함하십시오.\n\n**토큰 유효기간:** 1시간\n**토큰 저장 위치:** 클라이언트 메모리 (Zustand Store) - 새로고침 시 재로그인 필요"
+        "description": "JWT Access Token을 사용한 Bearer 인증입니다.\n\n로그인(`POST /api/auth/login`) 후 발급된 `token`을 `Authorization: Bearer <token>` 형식으로 헤더에 포함하십시오.\n\n**토큰 유효기간:** 1시간\n**토큰 저장 위치:** 클라이언트 메모리 (Zustand Store) - 새로고침 시 재로그인 필요"
       }
     },
     "parameters": {
@@ -1181,9 +1135,9 @@
       "LoginData": {
         "type": "object",
         "description": "로그인 성공 시 반환되는 데이터.",
-        "required": ["accessToken", "user"],
+        "required": ["token", "user"],
         "properties": {
-          "accessToken": {
+          "token": {
             "type": "string",
             "description": "JWT Access Token. 유효기간 1시간. 이후 모든 인증 요청의 `Authorization: Bearer <token>` 헤더에 포함하십시오.",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NTBlODQwMC1lMjliLTQxZDQtYTcxNi00NDY2NTU0NDAwMDAiLCJpYXQiOjE3NDM0OTI4MDAsImV4cCI6MTc0MzQ5NjQwMH0.signature"

@@ -152,10 +152,10 @@
 | 예상 소요 | 30분 |
 
 **완료 조건:**
-- [ ] `backend/package.json` 생성, 모든 의존성 명시
-- [ ] `backend/tsconfig.json` strict 모드 설정
-- [ ] `npm run dev`로 서버 정상 기동
-- [ ] `.env.example`에 10개 환경 변수 키 기록
+- [x] `backend/package.json` 생성, 모든 의존성 명시
+- [x] `backend/tsconfig.json` strict 모드 설정
+- [x] `npm run dev`로 서버 정상 기동
+- [x] `.env.example`에 10개 환경 변수 키 기록
 
 ---
 
@@ -168,9 +168,9 @@
 | 예상 소요 | 20분 |
 
 **완료 조건:**
-- [ ] 필수 환경 변수 누락 시 프로세스 종료
-- [ ] `pg.Pool` 연결 테스트 통과
-- [ ] Pool 인스턴스 싱글톤 export
+- [x] 필수 환경 변수 누락 시 프로세스 종료
+- [x] `pg.Pool` 연결 테스트 통과
+- [x] Pool 인스턴스 싱글톤 export
 
 ---
 
@@ -183,11 +183,11 @@
 | 예상 소요 | 30분 |
 
 **완료 조건:**
-- [ ] `localhost:3000` 서버 접근 가능
-- [ ] CORS가 환경 변수 Origin으로 제한
-- [ ] 존재하지 않는 경로 → 404 표준 에러 응답
-- [ ] 처리되지 않은 예외 → 500 표준 에러 응답
-- [ ] AppError 클래스가 VALIDATION_ERROR, UNAUTHORIZED, FORBIDDEN, NOT_FOUND, DUPLICATE_EMAIL, INTERNAL_ERROR 지원
+- [x] `localhost:3000` 서버 접근 가능
+- [x] CORS가 환경 변수 Origin으로 제한
+- [x] 존재하지 않는 경로 → 404 표준 에러 응답
+- [x] 처리되지 않은 예외 → 500 표준 에러 응답
+- [x] AppError 클래스가 VALIDATION_ERROR, UNAUTHORIZED, FORBIDDEN, NOT_FOUND, DUPLICATE_EMAIL, INTERNAL_ERROR 지원
 
 ---
 
@@ -200,9 +200,9 @@
 | 예상 소요 | 20분 |
 
 **완료 조건:**
-- [ ] 모든 API 요청/응답 타입 정의
-- [ ] TodoStatus enum (Pending, InProgress, Overdue, Completed)
-- [ ] `req.user` 타입 확장이 컴파일 에러 없이 동작
+- [x] 모든 API 요청/응답 타입 정의
+- [x] TodoStatus enum (Pending, InProgress, Overdue, Completed)
+- [x] `req.user` 타입 확장이 컴파일 에러 없이 동작
 
 ---
 
@@ -215,10 +215,10 @@
 | 예상 소요 | 20분 |
 
 **완료 조건:**
-- [ ] `hashPassword`가 bcrypt 해시 반환
-- [ ] `comparePassword`가 올바른 비교 결과 반환
-- [ ] `generateToken`이 1시간 만료 JWT 반환
-- [ ] `verifyToken`이 만료/변조 토큰에 에러 throw
+- [x] `hashPassword`가 bcrypt 해시 반환
+- [x] `comparePassword`가 올바른 비교 결과 반환
+- [x] `generateToken`이 1시간 만료 JWT 반환
+- [x] `verifyToken`이 만료/변조 토큰에 에러 throw
 
 ---
 
@@ -231,10 +231,10 @@
 | 예상 소요 | 20분 |
 
 **완료 조건:**
-- [ ] 토큰 없음 → 401 반환
-- [ ] 만료된 토큰 → 401 반환
-- [ ] 변조된 토큰 → 401 반환
-- [ ] 유효한 토큰 → `req.user`에 userId, email 설정 후 통과
+- [x] 토큰 없음 → 401 반환
+- [x] 만료된 토큰 → 401 반환
+- [x] 변조된 토큰 → 401 반환
+- [x] 유효한 토큰 → `req.user`에 userId, email 설정 후 통과
 
 ---
 
@@ -247,9 +247,9 @@
 | 예상 소요 | 20분 |
 
 **완료 조건:**
-- [ ] `findByEmail` - 존재 시 user 반환, 미존재 시 null
-- [ ] `create` - 새 사용자 생성, password 제외 반환
-- [ ] 모든 쿼리 파라미터 바인딩 사용
+- [x] `findByEmail` - 존재 시 user 반환, 미존재 시 null
+- [x] `create` - 새 사용자 생성, password 제외 반환
+- [x] 모든 쿼리 파라미터 바인딩 사용
 
 ---
 
@@ -262,11 +262,11 @@
 | 예상 소요 | 40분 |
 
 **완료 조건:**
-- [ ] 유효한 입력 → 사용자 생성 성공
-- [ ] 이메일 형식/비밀번호 정책/이름 위반 → VALIDATION_ERROR(400)
-- [ ] 이메일 중복 → DUPLICATE_EMAIL(409)
-- [ ] 올바른 자격 증명 → JWT 토큰 반환
-- [ ] 잘못된 이메일/비밀번호 → 동일한 401 메시지 (계정 존재 여부 비노출)
+- [x] 유효한 입력 → 사용자 생성 성공
+- [x] 이메일 형식/비밀번호 정책/이름 위반 → VALIDATION_ERROR(400)
+- [x] 이메일 중복 → DUPLICATE_EMAIL(409)
+- [x] 올바른 자격 증명 → JWT 토큰 반환
+- [x] 잘못된 이메일/비밀번호 → 동일한 401 메시지 (계정 존재 여부 비노출)
 
 ---
 
@@ -279,10 +279,10 @@
 | 예상 소요 | 30분 |
 
 **완료 조건:**
-- [ ] POST /api/auth/register → 201, 표준 성공 응답
-- [ ] POST /api/auth/login → 200, token 포함
-- [ ] POST /api/auth/logout → 인증 미들웨어 통과 후 200
-- [ ] 모든 에러가 표준 에러 응답 형식
+- [x] POST /api/auth/register → 201, 표준 성공 응답
+- [x] POST /api/auth/login → 200, token 포함
+- [x] POST /api/auth/logout → 인증 미들웨어 통과 후 200
+- [x] 모든 에러가 표준 에러 응답 형식
 
 ---
 
@@ -295,11 +295,11 @@
 | 예상 소요 | 50분 |
 
 **완료 조건:**
-- [ ] CRUD 기본 오퍼레이션 정상 동작
-- [ ] 상태별 필터 SQL 정확 (Pending/InProgress/Overdue/Completed/종료된 할일)
-- [ ] start_date/due_date 기준 ASC/DESC 정렬
-- [ ] LIMIT/OFFSET 페이지네이션
-- [ ] 모든 쿼리 파라미터 바인딩 사용
+- [x] CRUD 기본 오퍼레이션 정상 동작
+- [x] 상태별 필터 SQL 정확 (Pending/InProgress/Overdue/Completed/종료된 할일)
+- [x] start_date/due_date 기준 ASC/DESC 정렬
+- [x] LIMIT/OFFSET 페이지네이션
+- [x] 모든 쿼리 파라미터 바인딩 사용
 
 ---
 
@@ -312,12 +312,12 @@
 | 예상 소요 | 60분 |
 
 **완료 조건:**
-- [ ] 유효성 검증 (제목, 설명, 날짜 형식, 날짜 순서)
-- [ ] 페이지네이션 메타 (page, size, totalCount, totalPages) 정확 반환
-- [ ] size > 100 → 100으로 자동 제한
-- [ ] 소유권 불일치 → 403 FORBIDDEN
-- [ ] 미존재 할일 → 404 NOT_FOUND
-- [ ] `calculateTodoStatus`가 4가지 상태 정확 산출
+- [x] 유효성 검증 (제목, 설명, 날짜 형식, 날짜 순서)
+- [x] 페이지네이션 메타 (page, size, totalCount, totalPages) 정확 반환
+- [x] size > 100 → 100으로 자동 제한
+- [x] 소유권 불일치 → 403 FORBIDDEN
+- [x] 미존재 할일 → 404 NOT_FOUND
+- [x] `calculateTodoStatus`가 4가지 상태 정확 산출
 
 ---
 
@@ -330,11 +330,11 @@
 | 예상 소요 | 30분 |
 
 **완료 조건:**
-- [ ] 10개 API 엔드포인트 라우트 등록
-- [ ] 모든 할일 라우트에 authMiddleware 적용
-- [ ] 성공 응답 표준 형식 준수
-- [ ] 목록 응답에 pagination 객체 포함
-- [ ] 삭제 API → 204 No Content
+- [x] 10개 API 엔드포인트 라우트 등록
+- [x] 모든 할일 라우트에 authMiddleware 적용
+- [x] 성공 응답 표준 형식 준수
+- [x] 목록 응답에 pagination 객체 포함
+- [x] 삭제 API → 204 No Content
 
 ---
 
@@ -347,9 +347,9 @@
 | 예상 소요 | 30분 |
 
 **완료 조건:**
-- [ ] 잘못된 UUID → 400 반환
-- [ ] 필수 필드 누락 → 400 (구체적 필드명 포함 메시지)
-- [ ] Controller/Service 중복 검증 최소화
+- [x] 잘못된 UUID → 400 반환
+- [x] 필수 필드 누락 → 400 (구체적 필드명 포함 메시지)
+- [x] Controller/Service 중복 검증 최소화
 
 ---
 
@@ -362,10 +362,10 @@
 | 예상 소요 | 90분 |
 
 **완료 조건:**
-- [ ] 인증 통합 테스트 최소 6개 케이스 통과
-- [ ] 할일 통합 테스트 최소 15개 케이스 통과
-- [ ] 미인증 → 401, 타인 데이터 → 403 케이스 포함
-- [ ] 모든 테스트 독립 실행 가능
+- [x] 인증 통합 테스트 최소 6개 케이스 통과
+- [x] 할일 통합 테스트 최소 15개 케이스 통과
+- [x] 미인증 → 401, 타인 데이터 → 403 케이스 포함
+- [x] 모든 테스트 독립 실행 가능
 
 ---
 
@@ -378,10 +378,10 @@
 | 예상 소요 | 60분 |
 
 **완료 조건:**
-- [ ] 비밀번호 정책 4가지 위반 케이스 통과
-- [ ] 할일 상태 산출 4가지 케이스 통과
-- [ ] 소유권 검증 로직 테스트 통과
-- [ ] `npm test` 전체 통과
+- [x] 비밀번호 정책 4가지 위반 케이스 통과
+- [x] 할일 상태 산출 4가지 케이스 통과
+- [x] 소유권 검증 로직 테스트 통과
+- [x] `npm test` 전체 통과
 
 ---
 
