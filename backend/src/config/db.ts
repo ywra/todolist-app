@@ -1,5 +1,8 @@
-import { Pool } from 'pg';
+import { Pool, types } from 'pg';
 import { config } from './env';
+
+// DATE 타입(OID 1082)을 Date 객체 대신 'YYYY-MM-DD' 문자열로 반환
+types.setTypeParser(1082, (val: string) => val);
 
 export const pool = new Pool({
   host: config.db.host,
