@@ -39,6 +39,12 @@ export default function Header() {
           {isAuthenticated ? (
             <nav className="header-nav">
               <Link
+                to="/todos"
+                className={`header-nav-link ${location.pathname === '/todos' ? 'header-nav-link-active' : ''}`}
+              >
+                {t('todo.myTodos')}
+              </Link>
+              <Link
                 to="/daily"
                 className={`header-nav-link ${location.pathname === '/daily' ? 'header-nav-link-active' : ''}`}
               >

@@ -58,8 +58,9 @@ describe('DailyTodoPage', () => {
   it('"내 할일 목록 →" 링크가 /todos로 이동한다', () => {
     mockUseDailyTodos.mockReturnValue({ data: { data: [], success: true }, isLoading: false });
     renderPage();
-    const link = screen.getByRole('link', { name: /내 할일 목록/i });
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', '/todos');
+    const links = screen.getAllByRole('link', { name: /내 할일 목록/i });
+    const footerLink = links.find(l => l.textContent?.includes('→'));
+    expect(footerLink).toBeInTheDocument();
+    expect(footerLink).toHaveAttribute('href', '/todos');
   });
 });
