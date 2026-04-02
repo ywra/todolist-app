@@ -1,0 +1,101 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal-overlay);
+  animation: modal-fade-in 0.2s ease-out;
+}
+
+.modal-card {
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-xl);
+  max-width: 480px;
+  width: calc(100% - 32px);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-modal);
+  animation: modal-slide-up 0.2s ease-out;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal-title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  line-height: 1;
+  padding: 0 4px;
+}
+.modal-close:hover {
+  color: var(--color-text-primary);
+}
+
+.modal-body {
+  padding: 24px;
+  color: var(--color-text-primary);
+  font-size: var(--text-base);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: 16px 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+.modal-btn {
+  height: 40px;
+  padding: 0 20px;
+  font-family: var(--font-family);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  border: 1px solid transparent;
+}
+
+.modal-btn-cancel {
+  background-color: #ffffff;
+  color: var(--color-text-secondary);
+  border-color: var(--color-border-input);
+}
+.modal-btn-cancel:hover {
+  background-color: var(--color-bg);
+}
+
+.modal-btn-confirm {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+}
+.modal-btn-confirm:hover {
+  background-color: var(--color-primary-hover);
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-slide-up {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

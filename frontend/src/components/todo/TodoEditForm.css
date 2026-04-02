@@ -1,0 +1,29 @@
+.todo-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.todo-edit-form-dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.todo-edit-form-error {
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}
+
+.todo-edit-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+@media (max-width: 480px) {
+  .todo-edit-form-dates {
+    grid-template-columns: 1fr;
+  }
+}

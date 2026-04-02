@@ -1,0 +1,137 @@
+.todo-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 720px;
+}
+
+.todo-detail-back-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-sm);
+  color: var(--color-info);
+  text-decoration: none;
+  gap: var(--space-1);
+  transition: color var(--transition-fast);
+}
+
+.todo-detail-back-link:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.todo-detail-card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-sm);
+}
+
+.todo-detail-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+}
+
+.todo-detail-card-actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.todo-detail-title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.todo-detail-divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--space-5) 0;
+}
+
+.todo-detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.todo-detail-section-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  display: block;
+}
+
+.todo-detail-description {
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.todo-detail-dates {
+  flex-direction: row;
+  gap: var(--space-10);
+}
+
+.todo-detail-date-value {
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  margin-top: var(--space-1);
+  display: block;
+}
+
+.todo-detail-meta {
+  flex-direction: row;
+  gap: var(--space-10);
+}
+
+.todo-detail-meta-value {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-1);
+  display: block;
+}
+
+.todo-detail-complete-area {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--space-2);
+}
+
+.todo-detail-complete-area .btn {
+  min-width: 160px;
+}
+
+.todo-detail-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-10);
+}
+
+.todo-detail-not-found {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 767px) {
+  .todo-detail-card {
+    padding: var(--space-5);
+  }
+
+  .todo-detail-dates,
+  .todo-detail-meta {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .todo-detail-card-actions {
+    flex-direction: row;
+  }
+}

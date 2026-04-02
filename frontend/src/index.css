@@ -1,0 +1,100 @@
+:root {
+  /* 색상 - Primary */
+  --color-primary: #DC3545;
+  --color-primary-hover: #C82333;
+  --color-primary-light: #FFF5F5;
+
+  /* 색상 - Neutral */
+  --color-bg: #F8F9FA;
+  --color-bg-card: #FFFFFF;
+  --color-border: #E9ECEF;
+  --color-border-input: #CED4DA;
+  --color-text-primary: #212529;
+  --color-text-secondary: #6C757D;
+  --color-text-muted: #ADB5BD;
+
+  /* 색상 - Semantic */
+  --color-success: #28A745;
+  --color-success-bg: #D4EDDA;
+  --color-danger: #DC3545;
+  --color-danger-bg: #F8D7DA;
+  --color-info: #007BFF;
+  --color-info-bg: #D1ECF1;
+
+  /* 타이포그래피 */
+  --font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+
+  /* 간격 */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* 반경 */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-pill: 9999px;
+
+  /* 그림자 */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+
+  /* 트랜지션 */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s ease-out;
+
+  /* 레이아웃 */
+  --header-height: 56px;
+  --content-max-width: 960px;
+  --z-header: 100;
+  --z-modal-overlay: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+}
+
+/* 기본 리셋 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

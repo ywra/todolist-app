@@ -1,0 +1,28 @@
+.auth-page {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--space-10);
+  padding-bottom: var(--space-10);
+  min-height: calc(100vh - var(--header-height));
+}
+
+.auth-page__card {
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-page__card--wide {
+  max-width: 440px;
+}
+
+@media (max-width: 767px) {
+  .auth-page {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .auth-page__card,
+  .auth-page__card--wide {
+    max-width: 100%;
+  }
+}
