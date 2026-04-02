@@ -6,6 +6,7 @@
 |------|--------|-----------|--------|
 | v1.0.0 | 2026-03-31 | 최초 작성 | - |
 | v1.1.0 | 2026-04-01 | ERD/DDL에서 status 컬럼 제거, users에서 updated_at 제거, 인증 흐름도 토큰 저장 수정, docs 목록에 6-erd.md 추가 | - |
+| v1.2.0 | 2026-04-02 | daily_todos, rewards 테이블 DDL 추가, 프로젝트 구조 업데이트 (daily-todo-routes, reward-routes 추가) | - |
 
 ---
 
@@ -199,13 +200,16 @@ erDiagram
 
 ```mermaid
 graph TB
-    subgraph Auth["🔐 인증 API"]
-        POST_REG["POST /api/auth/register<br/>회원 가입"]
-        POST_LOGIN["POST /api/auth/login<br/>로그인 → Token"]
-        POST_LOGOUT["POST /api/auth/logout<br/>로그아웃"]
+    subgraph Auth["🔐 인증 & 프로필 API"]
+        POST_REG["POST /api/auth/register<br/>회원 가입 UC-01"]
+        POST_LOGIN["POST /api/auth/login<br/>로그인 → Token UC-02"]
+        POST_LOGOUT["POST /api/auth/logout<br/>로그아웃 UC-03"]
+        GET_PROF["GET /api/auth/profile<br/>프로필 조회 UC-11"]
+        PUT_PROF["PUT /api/auth/profile<br/>프로필 수정 UC-11"]
+        PUT_PWD["PUT /api/auth/profile/password<br/>비밀번호 변경 UC-12"]
     end
     
-    subgraph Todo["✅ 할일 API (JWT 필수)"]
+    subgraph Todo["✅ 내 할일 API (JWT 필수)"]
         POST_TODO["POST /api/todos<br/>할일 등록 UC-04"]
         GET_TODOS["GET /api/todos<br/>할일 목록 조회 UC-05"]
         GET_TODO["GET /api/todos/:id<br/>할일 상세 조회 UC-06"]
@@ -213,6 +217,21 @@ graph TB
         PATCH_COMP["PATCH /api/todos/:id/complete<br/>할일 완료 UC-08"]
         DELETE_TODO["DELETE /api/todos/:id<br/>할일 삭제 UC-09"]
         PATCH_INCOMP["PATCH /api/todos/:id/incomplete<br/>할일 완료 취소 UC-10"]
+    end
+    
+    subgraph Daily["🌟 오늘의 할일 API (JWT 필수)"]
+        POST_DAILY["POST /api/daily-todos<br/>오늘의 할일 등록 UC-13"]
+        GET_DAILY["GET /api/daily-todos<br/>오늘의 할일 목록 UC-14"]
+        GET_CAL["GET /api/daily-todos/calendar<br/>달력 조회 UC-15"]
+        PATCH_DAILY_COMP["PATCH /api/daily-todos/:id/complete<br/>오늘의 할일 완료 UC-14"]
+        PATCH_DAILY_INCOMP["PATCH /api/daily-todos/:id/incomplete<br/>오늘의 할일 취소 UC-14"]
+        DELETE_DAILY["DELETE /api/daily-todos/:id<br/>오늘의 할일 삭제"]
+    end
+    
+    subgraph Reward["🏆 보상 API (JWT 필수)"]
+        GET_REWARD["GET /api/rewards<br/>보상 현황 조회 UC-17"]
+        POST_REWARD["POST /api/rewards<br/>보상 설정 UC-16"]
+        PUT_REWARD["PUT /api/rewards/:id<br/>보상 수정 UC-16"]
     end
     
     subgraph Response["📦 응답 형식"]
@@ -225,9 +244,17 @@ graph TB
     Todo --> LIST
     Todo --> SUCCESS
     Todo --> ERROR
+    Daily --> LIST
+    Daily --> SUCCESS
+    Daily --> ERROR
+    Reward --> SUCCESS
+    Reward --> LIST
+    Reward --> ERROR
     
     style Auth fill:#c8e6c9
     style Todo fill:#bbdefb
+    style Daily fill:#fff9c4
+    style Reward fill:#ffccbc
     style Response fill:#ffe0b2
 ```
 
@@ -294,7 +321,7 @@ CREATE TABLE users (
 );
 ```
 
-### todos 테이블
+### todos 테이블 (내 할일)
 
 ```sql
 CREATE TABLE todos (
@@ -314,6 +341,48 @@ CREATE INDEX idx_todos_user_id ON todos(user_id);
 
 > **참고:** 할일 상태는 `start_date`, `due_date`, `is_completed`, 현재 날짜로부터 산출되는 파생 값이므로 별도 컬럼으로 저장하지 않는다. ([도메인 정의서 §5](./1-domain-definition.md#5-할일-상태-정의), [ERD §1](./6-erd.md#1-엔티티-관계-다이어그램) 참조)
 
+### daily_todos 테이블 (오늘의 할일)
+
+```sql
+CREATE TABLE daily_todos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(200) NOT NULL,
+    description VARCHAR(2000),
+    start_date DATE NOT NULL,
+    due_date DATE NOT NULL CHECK (due_date >= start_date),
+    is_completed BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_daily_todos_user_id ON daily_todos(user_id);
+```
+
+> **참고:** 오늘의 할일은 todos 테이블과 완전 독립된 별도 시스템이다. (BR-12 참조)
+
+### rewards 테이블 (보상)
+
+```sql
+CREATE TABLE rewards (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    milestone INT NOT NULL,                      -- 10, 30, 100
+    tier VARCHAR(20) NOT NULL,                  -- 'small', 'medium', 'large'
+    title VARCHAR(200) NOT NULL,                -- 보상 제목 (사용자 작성)
+    description VARCHAR(2000),                  -- 보상 상세 (사용자 작성)
+    is_achieved BOOLEAN NOT NULL DEFAULT FALSE, -- 달성 여부 (자동 달성)
+    achieved_at TIMESTAMP,                      -- 달성 일시
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, milestone)                  -- 사용자당 마일스톤별 1개 (BR-16)
+);
+
+CREATE INDEX idx_rewards_user_id ON rewards(user_id);
+```
+
+> **참고:** 마일스톤은 10, 30, 100이며, 오늘의 할일 완료 개수 기준으로 자동 달성된다. (UC-17, BR-17 참조)
+
 ---
 
 ## 8. 프로젝트 구조 (모노레포)
@@ -325,13 +394,13 @@ graph TD
     subgraph Frontend["frontend/"]
         public["public/"]
         src["src/"]
-        src_api["api/ (auth-api, todo-api)"]
-        src_comp["components/ (auth, todo, common)"]
-        src_hooks["hooks/ (useAuth, useTodos)"]
-        src_pages["pages/ (LoginPage, TodoListPage)"]
-        src_stores["stores/ (auth-store)"]
-        src_types["types/ (auth, todo, api)"]
-        src_utils["utils/ (validation, date)"]
+        src_api["api/ (auth-api, todo-api, daily-todo-api, reward-api)"]
+        src_comp["components/ (auth, todo, daily-todo, reward, common)"]
+        src_hooks["hooks/ (useAuth, useTodos, useDailyTodos, useRewards)"]
+        src_pages["pages/ (LoginPage, TodoListPage, ProfilePage, DailyTodoPage, RewardPage)"]
+        src_stores["stores/ (auth-store, theme-store)"]
+        src_types["types/ (auth, todo, daily-todo, reward, api)"]
+        src_utils["utils/ (validation, date, format)"]
         
         src --> src_api
         src --> src_comp
@@ -345,12 +414,12 @@ graph TD
     subgraph Backend["backend/"]
         bsrc["src/"]
         config["config/ (db, env)"]
-        controllers["controllers/ (auth, todo)"]
+        controllers["controllers/ (auth, todo, daily-todo, reward)"]
         middlewares["middlewares/ (auth, error)"]
-        repositories["repositories/ (user, todo)"]
-        routes["routes/ (auth, todo, index)"]
-        services["services/ (auth, todo)"]
-        btypes["types/ (auth, todo, express.d)"]
+        repositories["repositories/ (user, todo, daily-todo, reward)"]
+        routes["routes/ (auth, todo, daily-todo, reward, index)"]
+        services["services/ (auth, todo, daily-todo, reward)"]
+        btypes["types/ (auth, todo, daily-todo, reward, express.d)"]
         utils["utils/ (password, jwt, error)"]
         btests["tests/ (unit, integration)"]
         
@@ -485,10 +554,12 @@ graph LR
 
 | 문서명 | 경로 | 버전 | 설명 |
 |--------|------|------|------|
-| 도메인 정의서 | [./1-domain-definition.md](./1-domain-definition.md) | v1.1.0 | 도메인 모델, 유스케이스, 비즈니스 규칙 |
+| 도메인 정의서 | [./1-domain-definition.md](./1-domain-definition.md) | v1.2.0 | 도메인 모델 (Todo, DailyTodo, Reward), 유스케이스, 비즈니스 규칙 |
 | PRD | [./2-prd.md](./2-prd.md) | v1.0.0 | 기술 스택, 목표, 마일스톤 |
-| 사용자 시나리오 | [./3-user-scenario.md](./3-user-scenario.md) | v1.0.0 | 실제 사용자 흐름 |
+| 사용자 시나리오 | [./3-user-scenario.md](./3-user-scenario.md) | v1.1.0 | 실제 사용자 흐름 (SCN-01 ~ SCN-17) |
 | 프로젝트 구조 | [./4-project-structure.md](./4-project-structure.md) | v1.0.0 | 디렉토리, 레이어, 네이밍 규칙 |
+| ERD | [./6-erd.md](./6-erd.md) | v1.0.0 | 엔티티 관계 다이어그램 |
+| 실행계획서 | [./7-execution-plan.md](./7-execution-plan.md) | v1.1.0 | 프로젝트 Task 및 완료 상태 |
 
 ---
 
