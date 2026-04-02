@@ -5,6 +5,7 @@
 | 버전 | 변경일 | 변경 내용 | 작성자 |
 |------|--------|-----------|--------|
 | v1.0.0 | 2026-04-01 | 최초 작성 | - |
+| v1.1.0 | 2026-04-02 | 오늘의 할일 및 보상 시스템 엔드포인트, 디렉토리 구조, 프로필 관련 API 추가 | - |
 
 ---
 
@@ -183,6 +184,9 @@ RESTful 규칙을 따르며, 리소스는 복수형 명사를 사용한다.
 | POST | `/api/auth/register` | 회원 가입 | UC-01 |
 | POST | `/api/auth/login` | 로그인 | UC-02 |
 | POST | `/api/auth/logout` | 로그아웃 | UC-03 |
+| GET | `/api/auth/profile` | 프로필 조회 | - |
+| PUT | `/api/auth/profile` | 프로필 수정 | - |
+| PUT | `/api/auth/profile/password` | 비밀번호 변경 | - |
 | POST | `/api/todos` | 할일 등록 | UC-04 |
 | GET | `/api/todos` | 할일 목록 조회 | UC-05 |
 | GET | `/api/todos/:id` | 할일 상세 조회 | UC-06 |
@@ -190,6 +194,14 @@ RESTful 규칙을 따르며, 리소스는 복수형 명사를 사용한다.
 | PATCH | `/api/todos/:id/complete` | 할일 완료 처리 | UC-08 |
 | DELETE | `/api/todos/:id` | 할일 삭제 | UC-09 |
 | PATCH | `/api/todos/:id/incomplete` | 할일 완료 취소 | UC-10 |
+| GET | `/api/daily-todos` | 오늘의 할일 목록 조회 | - |
+| POST | `/api/daily-todos` | 오늘의 할일 등록 | - |
+| PATCH | `/api/daily-todos/:id/complete` | 오늘의 할일 완료 | - |
+| PATCH | `/api/daily-todos/:id/incomplete` | 오늘의 할일 미완료 | - |
+| DELETE | `/api/daily-todos/:id` | 오늘의 할일 삭제 | - |
+| GET | `/api/rewards` | 보상 현황 조회 | - |
+| POST | `/api/rewards` | 보상 설정 | - |
+| PUT | `/api/rewards/:id` | 보상 수정 | - |
 
 ---
 
@@ -330,29 +342,45 @@ frontend/
 │   ├── api/                    # API 통신 함수
 │   │   ├── auth-api.ts
 │   │   ├── todo-api.ts
+│   │   ├── daily-todo-api.ts
+│   │   ├── reward-api.ts
 │   │   └── client.ts           # Axios 인스턴스 설정
 │   ├── components/             # 재사용 가능한 UI 컴포넌트
 │   │   ├── common/             # 공통 (Button, Input, Modal 등)
 │   │   ├── auth/               # 인증 관련
 │   │   ├── todo/               # 할일 관련
+│   │   │   └── DailyTodoItem.tsx
 │   │   └── layout/             # 레이아웃 (Header, Footer 등)
 │   ├── hooks/                  # 커스텀 훅
 │   │   ├── useAuth.ts          # 인증 TanStack Query 훅
-│   │   └── useTodos.ts         # 할일 TanStack Query 훅
+│   │   ├── useTodos.ts         # 할일 TanStack Query 훅
+│   │   ├── useDailyTodos.ts    # 오늘의 할일 TanStack Query 훅
+│   │   └── useRewards.ts       # 보상 TanStack Query 훅
 │   ├── pages/                  # 페이지 컴포넌트
 │   │   ├── LoginPage.tsx
 │   │   ├── RegisterPage.tsx
 │   │   ├── TodoListPage.tsx
-│   │   └── TodoDetailPage.tsx
+│   │   ├── TodoDetailPage.tsx
+│   │   ├── DailyTodoPage.tsx
+│   │   ├── RewardPage.tsx
+│   │   └── ProfilePage.tsx
 │   ├── stores/                 # Zustand 전역 상태 스토어
-│   │   └── auth-store.ts       # 인증 상태 (토큰, 사용자 정보)
+│   │   ├── auth-store.ts       # 인증 상태 (토큰, 사용자 정보)
+│   │   ├── theme-store.ts      # 테마 상태 (Dark Mode)
+│   │   └── locale-store.ts     # 언어 설정 (i18n)
 │   ├── types/                  # TypeScript 타입 정의
 │   │   ├── auth-types.ts
 │   │   ├── todo-types.ts
+│   │   ├── daily-todo-types.ts
+│   │   ├── reward-types.ts
 │   │   └── api-types.ts        # 공통 API 응답 타입
 │   ├── utils/                  # 유틸리티 함수
 │   │   ├── date-utils.ts       # 날짜 포매팅, 상태 산출
 │   │   └── validation-utils.ts # 클라이언트 유효성 검증
+│   ├── i18n/                   # 국제화 (한국어/영어/일본어)
+│   │   ├── ko.json
+│   │   ├── en.json
+│   │   └── ja.json
 │   ├── App.tsx                 # 앱 루트, 라우터 설정
 │   ├── main.tsx                # 엔트리 포인트
 │   └── index.css               # 글로벌 스타일
@@ -387,22 +415,32 @@ backend/
 │   │   └── env.ts              # 환경 변수 로드 및 검증
 │   ├── controllers/            # 요청/응답 처리
 │   │   ├── auth-controller.ts
-│   │   └── todo-controller.ts
+│   │   ├── todo-controller.ts
+│   │   ├── daily-todo-controller.ts
+│   │   └── reward-controller.ts
 │   ├── middlewares/            # Express 미들웨어
 │   │   └── auth-middleware.ts  # JWT 검증
 │   ├── repositories/           # 데이터 접근 (Raw SQL)
 │   │   ├── user-repository.ts
-│   │   └── todo-repository.ts
+│   │   ├── todo-repository.ts
+│   │   ├── daily-todo-repository.ts
+│   │   └── reward-repository.ts
 │   ├── routes/                 # 라우트 정의
 │   │   ├── auth-routes.ts
 │   │   ├── todo-routes.ts
+│   │   ├── daily-todo-routes.ts
+│   │   ├── reward-routes.ts
 │   │   └── index.ts            # 라우트 통합
 │   ├── services/               # 비즈니스 로직
 │   │   ├── auth-service.ts
-│   │   └── todo-service.ts
+│   │   ├── todo-service.ts
+│   │   ├── daily-todo-service.ts
+│   │   └── reward-service.ts
 │   ├── types/                  # TypeScript 타입 정의
 │   │   ├── auth-types.ts
 │   │   ├── todo-types.ts
+│   │   ├── daily-todo-types.ts
+│   │   ├── reward-types.ts
 │   │   └── express.d.ts        # Express Request 타입 확장 (req.user)
 │   ├── utils/                  # 유틸리티 함수
 │   │   ├── password-utils.ts   # bcrypt 해싱
@@ -437,5 +475,6 @@ backend/
 | 문서명 | 경로 | 버전 |
 |--------|------|------|
 | 도메인 정의서 | [./1-domain-definition.md](./1-domain-definition.md) | v1.1.0 |
-| PRD | [./2-prd.md](./2-prd.md) | v1.0.0 |
+| PRD | [./2-prd.md](./2-prd.md) | v1.1.0 |
 | 사용자 시나리오 | [./3-user-scenario.md](./3-user-scenario.md) | v1.0.0 |
+| ERD | [./6-erd.md](./6-erd.md) | v1.1.0 |
