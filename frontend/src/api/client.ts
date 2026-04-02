@@ -23,8 +23,13 @@ apiClient.interceptors.response.use(
       axios.isAxiosError(error) &&
       error.response?.status === 401
     ) {
-      useAuthStore.getState().clearAuth();
-      window.location.href = '/login';
+      // 로그인/회원가입 API의 401은 리다이렉트하지 않음 (폼에서 에러 메시지 표시)
+      const url = error.config?.url ?? '';
+      const isAuthApi = url.includes('/auth/login') || url.includes('/auth/register');
+      if (!isAuthApi) {
+        useAuthStore.getState().clearAuth();
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   },
