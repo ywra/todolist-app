@@ -11,17 +11,19 @@ interface FormFields {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
 interface FormErrors {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
 export default function RegisterForm() {
-  const [fields, setFields] = useState<FormFields>({ name: '', email: '', password: '' });
-  const [errors, setErrors] = useState<FormErrors>({ name: '', email: '', password: '' });
+  const [fields, setFields] = useState<FormFields>({ name: '', email: '', password: '', confirmPassword: '' });
+  const [errors, setErrors] = useState<FormErrors>({ name: '', email: '', password: '', confirmPassword: '' });
   const [serverError, setServerError] = useState<string>('');
 
   const { mutate: register, isPending } = useRegister();
@@ -49,10 +51,11 @@ export default function RegisterForm() {
     const nameError = validateField('name', fields.name);
     const emailError = validateField('email', fields.email);
     const passwordError = validateField('password', fields.password);
+    const confirmError = fields.confirmPassword !== fields.password ? t('profile.passwordMismatch') : '';
 
-    setErrors({ name: nameError, email: emailError, password: passwordError });
+    setErrors({ name: nameError, email: emailError, password: passwordError, confirmPassword: confirmError });
 
-    if (nameError || emailError || passwordError) {
+    if (nameError || emailError || passwordError || confirmError) {
       return;
     }
 
@@ -109,6 +112,16 @@ export default function RegisterForm() {
             />
             <p className="auth-card__password-hint">{t('auth.passwordPolicy')}</p>
           </div>
+          <Input
+            label={t('profile.confirmPassword')}
+            name="confirmPassword"
+            type="password"
+            value={fields.confirmPassword}
+            onChange={handleChange}
+            placeholder={t('profile.confirmPassword')}
+            required
+            error={errors.confirmPassword || undefined}
+          />
         </div>
 
         {serverError ? <div className="auth-card__error-box">{serverError}</div> : null}
