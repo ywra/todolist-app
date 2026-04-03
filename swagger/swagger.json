@@ -16,6 +16,10 @@
     {
       "url": "http://localhost:3000",
       "description": "로컬 개발 서버"
+    },
+    {
+      "url": "https://backend-ywra.vercel.app",
+      "description": "vercel backend server"
     }
   ],
   "tags": [
