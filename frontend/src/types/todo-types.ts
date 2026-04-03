@@ -1,9 +1,11 @@
-export enum TodoStatus {
-  PENDING = 'pending',
-  IN_PROGRESS = 'in_progress',
-  OVERDUE = 'overdue',
-  COMPLETED = 'completed',
-}
+export const TodoStatus = {
+  PENDING: 'pending',
+  IN_PROGRESS: 'in_progress',
+  OVERDUE: 'overdue',
+  COMPLETED: 'completed',
+} as const;
+
+export type TodoStatus = (typeof TodoStatus)[keyof typeof TodoStatus];
 
 export interface Todo {
   id: string;

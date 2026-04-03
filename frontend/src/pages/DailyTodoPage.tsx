@@ -32,7 +32,7 @@ function formatKoreanDate(date: Date): string {
 }
 
 function formatSelectedDateLabel(dateStr: string): string {
-  const [year, month, day] = dateStr.split('-');
+  const [, month, day] = dateStr.split('-');
   return `${Number(month)}월 ${Number(day)}일 할일`;
 }
 

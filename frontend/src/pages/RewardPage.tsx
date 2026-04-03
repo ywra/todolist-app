@@ -211,7 +211,7 @@ export default function RewardPage() {
     }
     if (!editTarget) return;
 
-    const { reward, milestone, tier } = editTarget;
+    const { reward, milestone } = editTarget;
 
     if (reward) {
       updateReward.mutate(
