@@ -1,13 +1,11 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-import path from 'path';
 import swaggerUi from 'swagger-ui-express';
 import { config } from './config/env';
 import { testConnection } from './config/db';
 import { AppError, ERROR_CODES } from './utils/error-utils';
 import { router } from './routes';
-
-const swaggerDocument = require(path.join(__dirname, '../../swagger/swagger.json'));
+import swaggerDocument from '../../swagger/swagger.json';
 
 const app = express();
 
